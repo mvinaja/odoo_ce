@@ -1,0 +1,2 @@
+docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -e POSTGRES_DB=postgres --name postgres_ce postgres:10
+docker run -v /home/sistemas/OdooCE/addons/13.0:/mnt/extra-addons -v /home/sistemas/OdooCE/config/13.0:/etc/odoo -p 7069:8069 --name odoo_13_ce --link postgres_ce:db -t odoo:13.0
