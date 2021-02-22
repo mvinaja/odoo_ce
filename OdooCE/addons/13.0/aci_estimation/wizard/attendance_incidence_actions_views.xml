@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Approve incidence -->
+    <record id="approve_incidence_form_view" model="ir.ui.view">
+        <field name="name">approve.incidence.form.view</field>
+        <field name="model">attendance.incidence.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <div colspan="2">
+                        <p>Approve Incidence(s)?</p>
+                    </div>
+                </group>
+                <footer>
+                    <button name="approve_incidence_button" type="object"
+                        string="Ok" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Trigger action to show "approve incidence" wizard -->
+    <record id="approve_incidence_action" model="ir.actions.act_window">
+        <field name="name">Approve Incidence</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.incidence</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="approve_incidence_form_view"/>
+    </record>
+
+    <!-- Reject incidence form view -->
+    <record id="reject_incidence_form_view" model="ir.ui.view">
+        <field name="name">reject.incidence.form.view</field>
+        <field name="model">attendance.incidence.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <div colspan="2">
+                        <p>Reject Incidence(s)?</p>
+                    </div>
+                </group>
+                <footer>
+                    <button name="reject_incidence_button" type="object" string="Ok" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Trigger action to show "reject incidence" wizard -->
+    <record id="reject_incidence_action" model="ir.actions.act_window">
+        <field name="name">Reject Incidence</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.incidence.actions</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="reject_incidence_form_view"/>
+    </record>
+
+    <!-- Send incidence to draft state: form view -->
+    <record id="send_to_draft_incidence_form_view" model="ir.ui.view">
+        <field name="name">send.to.draft.incidence.form.view</field>
+        <field name="model">attendance.incidence.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <div colspan="2">
+                        <p>Send to Draft Incidence(s)?</p>
+                    </div>
+                </group>
+                <footer>
+                    <button name="send_to_draft_incidence_button" type="object" string="Ok" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Trigger action to show "send incidence to draft state" wizard -->
+    <record id="send_to_draft_incidence_action" model="ir.actions.act_window">
+        <field name="name">Send to Draft Incidence</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.incidence.actions</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="send_to_draft_incidence_form_view"/>
+    </record>
+    <!-- Adjust log dates massively: form view -->
+    <record id="adjust_massively_log_dates_form_view" model="ir.ui.view">
+        <field name="name">adjust.massively.log_dates.form.view</field>
+        <field name="model">attendance.incidence.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="check_in"/>
+                    </group>
+                    <group>
+                        <field name="check_out"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="adjust_massively_log_dates_button" type="object"
+                        string="Save" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Trigger action to show "adjust massively log dates" wizard -->
+    <record id="adjust_massively_log_dates_action" model="ir.actions.act_window">
+        <field name="name">Adjust Log Dates</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">attendance.incidence.actions</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="adjust_massively_log_dates_form_view"/>
+    </record>
+    <!-- Create log dates massively: form view -->
+    <record id="create_multi_incidence_form_view" model="ir.ui.view">
+        <field name="name">create.multi.incidence.form.view</field>
+        <field name="model">attendance.incidence.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}" required="1"/>
+                        <field name="check_in"/>
+                        <field name="type_incidence" required="1"/>
+                        <field name="productivity_block"/>
+                    </group>
+                    <group>
+                        <field name="approve"/>
+                        <field name="check_out"/>
+                        <field name="description" required="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button type="object" name="generate_incidences" string="Generate" class="btn btn-primary"/>
+                    <button special="cancel" string="Cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

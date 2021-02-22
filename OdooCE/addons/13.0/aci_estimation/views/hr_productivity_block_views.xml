@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id="search_hr_productivity_block" model="ir.ui.view">
+            <field name="name">search_hr_productivity_block</field>
+            <field name="model">hr.productivity.block</field>
+            <field name="arch" type="xml">
+                <search string="Search ...">
+                    <field name="employee_id"/>
+                    <field name="status"/>
+                    <field name="dayofweek"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="final_start_date"/>
+                    <field name="final_end_date"/>
+                    <field name="duration"/>
+                    <field name="status"/>
+                    <field name="block_type"/>
+
+                    <filter name="today" string="Today" domain="[('final_start_date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),
+                    ('final_start_date', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+
+                    <filter name="month" string="This Month"
+                            domain="[
+                                '&amp;',
+                                ('final_start_date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                ('final_start_date', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
+                    ]"/>
+                    <separator/>
+                    <filter name="missing_incidence" string="Missing Incidence" domain="[('incidence_id', '=', False),
+                    ('block_type', '=', 'inactive'), ('block_origin', '=', 'incidence')]" />
+
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="Day of Week" domain="[]" context="{'group_by': 'dayofweek'}"/>
+                        <filter string="Final Start Date" domain="[]" context="{'group_by': 'final_start_date'}"/>
+                        <filter string="Final End Date" domain="[]" context="{'group_by': 'final_end_date'}"/>
+                        <filter string="Duration" domain="[]" context="{'group_by': 'duration'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by': 'status'}"/>
+                        <filter string="Block Type" domain="[]" context="{'group_by': 'block_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record id="hr_productivity_block_tree_view" model="ir.ui.view">
+            <field name="name">hr.productivity.block.tree.view</field>
+            <field name="model">hr.productivity.block</field>
+            <field name="arch" type="xml">
+                <tree create="false" editable="top"
+                action='[{
+                            "name": "Convert to Incidence",
+                            "act": "create_incidence_btn",
+                            "views": [{"module": "aci_estimation", "xml_id":
+                            "hr_productivity_block_incidence_form_view", "type": "form"}],
+                            "res_model": "hr.productivity.block.incidence",
+                            "src_model": "hr.productivity.block"
+                    },
+                    {
+                            "name": "Lock Block",
+                            "act": "button_close_block",
+                            "method": "button_close_block",
+                            "src_model": "hr.productivity.block"
+                    }]'>
+                    <button name="lock_block" string="" type="object" icon="fa-unlock" help="Lock Block (can't change dates)"
+                            attrs="{'invisible': [('status', '=', 'closed')]}"/>
+                    <field name="status"  invisible="1"/>
+                    <field name="warehouse_id" optional="hidden"/>
+                    <field name="period_id" readonly="1"/>
+                    <field name="incidence_id" readonly="1"/>
+                    <field name="employee_id" readonly="1"/>
+                    <field name="block_type" readonly="1"/>
+                    <field name="block_origin" readonly="1"/>
+                    <field name="block_available"/>
+                    <field name="dayofweek" readonly="1"/>
+                    <field name="tolerance" readonly="1"/>
+                    <field name="offset_start_date"  attrs="{'readonly': [('status','=', 'closed')]}"/>
+                    <button name="show_offset_start_date_calculator_btn" string="" type="object" icon="fa-step-backward"
+                            attrs="{'invisible': [('status','=', 'closed')]}" help="Edit Block Start (can write negative numbers)"/>
+                    <field name="start_date" readonly="1"/>
+                    <field name="end_date" readonly="1"/>
+                    <button name="show_offset_end_date_calculator_btn" string="" type="object" icon="fa-step-forward"
+                            help="Edit Block End (can write negative numbers)"
+                            attrs="{'invisible': [('status','=', 'closed')]}"/>
+                    <field name="offset_end_date"/>
+                    <field name="duration" readonly="1"/>
+                    <field name="fixed_duration" readonly="1"/>
+                    <field name="status"  readonly="1"/>
+                    <button name="show_productivity_btn" type="object" help="Show Inputs" icon="fa-input-sm"/>
+                </tree>
+            </field>
+        </record>
+
+    <record id="hr_productivity_block_timeline" model="ir.ui.view">
+        <field name="type">timeline</field>
+        <field name="model">hr.productivity.block</field>
+         <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <timeline date_start="final_start_date"
+                      date_stop="final_end_date"
+                      string="Productivity Block"
+                      default_group_by="employee_id"
+                      event_open_popup="true"
+                      zoomKey="ctrlKey"
+                      colors="#ec7063:block_type == 'inactive';#2ecb71:block_type=='active';"
+                      dependency_arrow="parent_id">
+
+                <field name="block_type"/>
+                <field name="block_origin"/>
+                <field name="employee_id"/>
+                <templates>
+                    <div t-name="timeline-item">
+                        <span t-esc="record.block_type"/> ,
+                        <span t-esc="record.block_origin"/>
+                    </div>
+                </templates>
+            </timeline>
+        </field>
+    </record>
+</odoo>

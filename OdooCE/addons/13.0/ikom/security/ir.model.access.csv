@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+product_template_package,product_template_package,model_product_template_package,base.group_user,1,1,1,1
+sale_order_package,sale_order_package,model_sale_order_package,base.group_user,1,1,1,1
+package_wizard,package_wizard,model_package_wizard,base.group_user,1,1,1,1
+

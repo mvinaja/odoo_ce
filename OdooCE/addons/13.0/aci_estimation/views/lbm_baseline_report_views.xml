@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="lbm_baseline_report_gantt_view" model="ir.ui.view">
+        <field name="name">lbm.baseline.report.gantt.view</field>
+        <field name="model">lbm.baseline.report</field>
+        <field name="arch" type="xml">
+             <gantt
+                    date_start="date_start"
+                    date_stop="date_end"
+                    string="Scenario"
+                    default_group_by="name"
+                    decoration-warning="planning_type == 'real'"
+                    decoration-danger="planning_type == 'replanning'"
+                    decoration-success="planning_type == 'executed'"
+                    decoration-info="planning_type == 'optimal'"
+                    plan="0">
+                    <field name="planning_type" invisible="1"/>
+                    <field name="name" width="250"/>
+            </gantt>
+        </field>
+    </record>
+    <record id="lbm_baseline_report_tree_view" model="ir.ui.view">
+        <field name="name">lbm.baseline.report.tree.view</field>
+        <field name="model">lbm.baseline.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="planning_type"/>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

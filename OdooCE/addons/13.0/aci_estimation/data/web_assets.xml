@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="aci_estimation_assets" name="aci_estimation_assets" inherit_id="web.assets_backend">
+            <xpath expr="//link[last()]" position="after">
+                <script type="text/javascript" src="/aci_estimation/static/lib/jquery-touch-punch/jquery-touch-punch.min.js"/>
+<!--                <script type="text/javascript" src="/aci_estimation/static/src/js/chatter.js"/>-->
+                <script type="text/javascript" src="/aci_estimation/static/src/js/timetracking_actions.js"/>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/action_manager_act_windows.js"/>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/kanban_controller.js"/>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/kanban_column.js"/>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/accum_time.js"/>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/views_widget.js"/>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/ua-parser.min.js"/>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/dialog.js"/>
+
+                <script type="text/javascript" src="/aci_estimation/static/src/js/attendance/attendance_log_actions.js"></script>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/attendance/hr_attendance_actions.js"></script>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/attendance/attendance_incidence_action.js"></script>
+                <script type="text/javascript" src="/aci_estimation/static/src/js/pivot/pivot_model.js"></script>
+
+                <link rel="stylesheet" href="/aci_estimation/static/src/css/kanban.css"/>
+                <link rel="stylesheet" href="/aci_estimation/static/src/css/calculator.css"/>
+                <link rel="stylesheet" href="/aci_estimation/static/src/css/time_tracking_css.css"/>
+                <link rel="stylesheet" href="/aci_estimation/static/src/css/kanban_stages.css"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

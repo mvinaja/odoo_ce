@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_zk_device_log_wizard_form_view" model="ir.ui.view">
+        <field name="name">hr.zk.device.log.wizard.form.view</field>
+        <field name="model">hr.zk.device.log.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="employee_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        <field name="log_date"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="generate_log_button" type="object" string="Generate"
+                        class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

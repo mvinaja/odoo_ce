@@ -1,0 +1,3 @@
+enterprise git@github.com:Vauxoo/enterprise.git
+pledra git@github.com:pledra/odoo-product-configurator.git
+tools git@bitbucket.org:Alce_Consorcio/alce_tools.git

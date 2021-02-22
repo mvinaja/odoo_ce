@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="aci_product_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" type="text/scss" href="/aci_product/static/src/scss/aci_product.scss"/>
+                <script type="text/javascript" src="/aci_product/static/src/js/relational_field.js"></script>
+            </xpath>
+        </template>
+
+        <record id="append_attribute_value_wizard_form" model="ir.ui.view">
+            <field name="name">append.attribute.value.wizard.form</field>
+            <field name="model">product.configurator.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <label for="action" colspan="2"/>
+                                <div class="o_row" colspan="2" style="margin-left: 32px;">
+                                    <field name="action" widget="radio" required="1"/>
+                                    <field name="type" widget="radio" required="1"/>
+                                    <field name="apply_to" widget="radio" required="1"/>
+                                </div>
+                            </group>
+                            <group>
+                                <label for="source_category" colspan="2"/>
+                                <div class="o_row" colspan="2">
+                                    Categ.<field name="source_category" options="{'no_create': True}"/>
+                                    Attrib.<field name="source_attribute"
+                                        options="{'no_create': True}"
+                                        domain="[('category_id','=',source_category)]"/>
+                                    <field name="source_selection" widget="many2many_selection"
+                                        options="{'no_create': True}"
+                                        domain="[('attribute_id','=',source_attribute)]"/>
+                                    <button type="object" name="reset_value_btn"
+                                        class="oe_stat_button" icon="fa-trash"/>
+                                </div>
+                                <label for="target_category" colspan="2"
+                                    attrs="{'invisible': [('action','!=','replace_value')]}"/>
+                                <div class="o_row" colspan="2"
+                                    attrs="{'invisible': [('action','!=','replace_value')]}">
+                                    Categ.<field name="target_category" options="{'no_create': True}"/>
+                                    Attrib.<field name="target_attribute"
+                                        options="{'no_create': True}"
+                                        domain="[('category_id','=',target_category)]"/>
+                                    <field name="target_selection" widget="many2many_selection"
+                                        options="{'no_create': True}"
+                                        domain="[('attribute_id','=',target_attribute)]"/>
+                                </div>
+                                <field name="source_values" nolabel="1" options="{'no_create': True}"
+                                    attrs="{'invisible': [('action','=','replace_value')]}">
+                                    <tree>
+                                        <field name="attribute_id"/>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                    </tree>
+                                </field>
+                                <field name="replace_line_ids" nolabel="1" colspan="2"
+                                    attrs="{'invisible': [('action','!=','replace_value')]}">
+                                    <tree editable="top">
+                                        <field name="remove_source"/>
+                                        <field name="source_attribute" options="{'no_create': True}"/>
+                                        <field name="source_value" options="{'no_create': True}"
+                                            domain="[('attribute_id','=',source_attribute)]"/>
+                                        <field name="target_attribute"/>
+                                        <field name="target_value" options="{'no_create': True}"
+                                               domain="[('attribute_id','=',target_attribute)]"/>
+                                        <field name="sequence" invisible="1"/>
+                                        <field name="wizard_id" invisible="1"/>
+                                        <field name="target_attribute" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                        <group string="Products">
+                            <div class="o_form_search" colspan="2">
+                                <button type="object" name="set_value_btn"
+                                    class="oe_stat_button" icon="fa-arrow-circle-up"/>
+                                <button type="object" name="search_product_btn"
+                                    class="oe_stat_button" icon="fa-search-plus"/>
+                                <button type="object" name="remove_product_btn"
+                                    class="oe_stat_button" icon="fa-trash"/>
+                            </div>
+                            <field name="target_templates" nolabel="1"
+                                options="{'no_create': True}" colspan="2"
+                                attrs="{'invisible': [('apply_to','=','product')]}">
+                                <tree>
+                                    <field name="categ_id"/>
+                                    <field name="name"/>
+                                    <field name="attribute_ids"
+                                        widget="many2many_tags" optional="show"/>
+                                    <field name="attribute_value_ids"
+                                        widget="many2many_tags" optional="show"/>
+                                </tree>
+                            </field>
+                            <field name="target_products" nolabel="1"
+                                options="{'no_create': True}" colspan="2"
+                                attrs="{'invisible': [('apply_to','=','template')]}">
+                                <tree>
+                                    <field name="categ_id"/>
+                                    <field name="name"/>
+                                    <field name="product_template_attribute_value_ids"
+                                        widget="many2many_tags"/>
+                                </tree>
+                            </field>
+                            <field name="source_values_count" invisible="1"/>
+                            <field name="target_templates_count" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button type="object" name="append_value_btn" string="Append Values"
+                            class="btn-primary" attrs="{'invisible':[('action','!=','append_value')]}"/>
+                        <button type="object" name="remove_value_btn" string="Remove Values"
+                            class="btn-primary" attrs="{'invisible':[('action','!=','remove_value')]}"/>
+                        <button type="object" name="replace_value_btn"
+                            string="Replace Values" class="btn-primary"
+                            attrs="{'invisible':[('action','!=','replace_value')]}"/>
+                        <button type="object" name="create_product_btn"
+                            string="Create Product" class="btn-primary"
+                            attrs="{'invisible': ['|',
+                                ('source_values_count','=',0),('target_templates_count','=',0)]}"/>
+                        <button type="object" name="set_default_btn" string="Reset"
+                            invisible="not context.get('has_defaults', False)"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_configurator_wizard_action" model="ir.actions.act_window">
+            <field name="name">Product Attribute Configurator</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.configurator.wizard</field>
+            <field name="target">new</field>
+            <field name="view_ids"
+               eval="[(5, 0, 0), (0, 0, {'view_mode': 'form', 'view_id': ref('append_attribute_value_wizard_form')})]"/>
+        </record>
+
+    </data>
+</odoo>

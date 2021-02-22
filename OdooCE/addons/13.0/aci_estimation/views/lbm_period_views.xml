@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="lbm_period_tree_view_inherit" model="ir.ui.view">
+        <field name="name">lbm.period.tree.view.inherit</field>
+        <field name="model">lbm.period</field>
+        <field name="inherit_id" ref="aci_lbm_flowline.lbm_period_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                    <attribute name="action">
+                        [{
+                        "name": "Add Missing Periods",
+                        "mode": "model",
+                        "act": "compute_period_btn",
+                        "method": "compute_period_btn",
+                        "src_model": "lbm.period"
+                         },{
+                        "name": "Add Periods",
+                        "mode": "model",
+                        "act": "add_period_btn",
+                        "action": "aci_lbm_flowline.add_period_wizard_action"
+                         },{
+                        "name": "Fix ITE",
+                        "act": "compute_ite_btn",
+                        "method": "compute_ite_btn",
+                        "src_model": "lbm.period"
+                         },{
+                            "title": "Close Period",
+                            "icon": "btn-secondary fa fa-lock",
+                            "act": "block_period_btn",
+                            "method": "block_period_btn",
+                            "src_model": "lbm.period"
+                        },{
+                            "title": "Open Period",
+                            "icon": "btn-secondary fa fa-unlock",
+                            "act": "open_period_btn",
+                            "method": "open_period_btn",
+                            "src_model": "lbm.period"
+                        }]
+                    </attribute>
+                </xpath>
+            <field name="period_group" position="replace">
+                <field name="period_group" optional="hidden"/>
+            </field>
+            <field name="period_start" position="replace">
+                <field name="period_start" optional="hidden"/>
+            </field>
+            <field name="period_end" position="replace">
+                <field name="period_end" optional="hidden"/>
+            </field>
+            <field name="scenario_start" position="replace">
+                <field name="scenario_start" optional="hidden"/>
+            </field>
+            <field name="period_group" position="before">
+                <button name="show_distribution_btn" type="object" help="Distribution Flowline"
+                    class="oe_stat_button" widget="statinfo"  icon="fa-line-chart"
+                    attrs="{'invisible': [('distribution_validated', '=', False)]}"/>
+                <button name="show_estimation_btn"   style="color:#7CA9DA;" type="object" help="Show Estimation"
+                        class="oe_stat_button" widget="statinfo" icon="fa-estimation-blue-sm"
+                    attrs="{'invisible': [('tracking_validated', '=', False)]}"/>
+                 <button name="show_ite_monitoring_btn" type="object" help="ITE Monitoring"
+                    class="oe_stat_button" widget="statinfo"  icon="fa-tasks"
+                    attrs="{'invisible': [('distribution_validated', '=', False)]}"/>
+                <button name="show_estim_monitoring_btn" type="object" help="Estimation Monitoring"
+                    class="oe_stat_button" widget="statinfo"  icon="fa-signal"
+                    attrs="{'invisible': [('distribution_validated', '=', False)]}"/>
+                <button name="show_wo_monitoring_btn" type="object" help="WO Monitoring"
+                    class="oe_stat_button" widget="statinfo"  icon="fa-flag"
+                    attrs="{'invisible': [('distribution_validated', '=', False)]}"/>
+                <button name="show_cost_report_btn" type="object" help="Cost Report"
+                    class="oe_stat_button" widget="statinfo"  icon="fa-dollar"
+                    attrs="{'invisible': [('distribution_validated', '=', False)]}"
+                    groups="aci_estimation.group_estimation_chief"/>
+                <field name="is_closed" invisible="1"/>
+                <button name="null_button" type="object" help="Closed"
+                    class="oe_stat_button" widget="statinfo" icon="fa-lock"
+                    attrs="{'invisible': [('is_closed', '=', False)]}"/>
+                <button name="move_multi_ite_btn" type="object" help="Move ITE"
+                    class="oe_stat_button" widget="statinfo" icon="fa-arrow-down"
+                    attrs="{'invisible': [('is_closed', '=', False)]}"
+                    groups="aci_estimation.group_estimation_chief"/>
+            </field>
+
+          <field name="period_id" position="replace">
+            <field name="period_id" readonly="1"/>
+            <field name="daily_tracking"/>
+          </field>
+            <button name="show_flowline_btn" position="after">
+                <field name="configuration_validated" invisible="1"/>
+                <field name="distribution_validated" invisible="1"/>
+                <field name="tracking_validated" invisible="1"/>
+                <field name="has_workorder" invisible="1"/>
+                <button name="show_scenario_step_btn"  style="color:#7CA9DA;" type="object" help="Show Steps"
+                        class="oe_stat_button" widget="statinfo" icon="fa-step-blue-sm"
+                        attrs="{'invisible': [('tracking_validated', '=', False)]}"/>
+                <button name="show_tracking_btn"   style="color:#7CA9DA;" type="object" help="Show Time Tracking"
+                        class="oe_stat_button" widget="statinfo" icon="fa-activity-blue-sm"
+                        attrs="{'invisible': [('tracking_validated', '=', False)]}"/>
+            </button>
+            <xpath expr="//button[@name='add_workorder_btn']" position="replace"></xpath>
+            <xpath expr="//button[@name='show_workcenter_btn']" position="replace"></xpath>
+            <xpath expr="//button[@name='copy_workcenter_btn']" position="replace"></xpath>
+            <xpath expr="//button[@name='remove_workorder_btn']" position="replace"></xpath>
+            <xpath expr="//button[@name='show_flowline_btn']" position="replace"></xpath>
+        </field>
+    </record>
+
+     <record id="lbm_period_move_view_tree" model="ir.ui.view">
+        <field name="name">lbm.period.move.view.tree</field>
+        <field name="model">lbm.period</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="0" delete="0">
+                <field name="scenario_id" invisible="1"/>
+                <field name="group_ids" invisible="1"/>
+                <field name="period_group" string="Group"/>
+                <field name="period_id" readonly="1"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="scenario_start"/>
+                <button name="move_ite_btn" type="object" help="Move here"
+                    class="oe_stat_button" widget="statinfo" icon="fa-plus"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

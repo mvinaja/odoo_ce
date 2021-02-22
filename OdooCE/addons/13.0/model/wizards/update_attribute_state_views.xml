@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="update_attribute_state_wizard_form" model="ir.ui.view">
+            <field name="name">update.attribute.state.wizard.form</field>
+            <field name="model">update.attribute.state.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="state" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="update_state_btn" string="Update State" type="object" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" class="btn-default"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="update_attribute_state_wizard" model="ir.actions.act_window">
+            <field name="name">Update State</field>
+            <field name="res_model">update.attribute.state.wizard</field>
+            <field name="target">new</field>
+            <field name="view_ids"
+               eval="[(5, 0, 0),
+                   (0, 0, {'view_mode': 'form', 'view_id': ref('update_attribute_state_wizard_form')})]"/>
+        </record>
+
+    </data>
+</odoo>

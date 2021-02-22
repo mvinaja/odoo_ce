@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ATTENDANCE LOG -->
+
+    <!-- Attendance Log Tree View -->
+    <record id="attendance_log_tree_view" model="ir.ui.view">
+        <field name="name">attendance.log.tree.view</field>
+        <field name="model">attendance.log</field>
+        <field name="arch" type="xml">
+            <tree action='[{
+                        "name": "Parse and Import",
+                        "act": "import_att_logs_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "parse_and_import_attendance_log_form_view", "type": "form"}],
+                        "src_model": "attendance.log",
+                        "res_model": "attendance.log.actions",
+                        "mode": "model"
+                    }, {
+                        "name": "Discard Nearby Logs",
+                        "act": "discard_nearby_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "discard_nearby_form_view", "type": "form"}],
+                        "src_model": "attendance.log",
+                        "res_model": "attendance.log.actions",
+                        "mode": "model"
+                    }, {
+                        "name": "Massive Att. Log",
+                        "act": "generate_massive_att_logs_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "generate_massive_att_logs_by_period_form_view", "type": "form"}],
+                        "src_model": "attendance.log",
+                        "res_model": "attendance.log.actions",
+                        "mode": "model"
+                    }]'>
+                <field name="employee_id"/>
+                <field name="pin"/>
+                <field name="structure_type_id"/>
+                <field name="date_computed"/>
+                <field name="day_computed"/>
+                <field name="hour_computed" widget="float_time"/>
+                <field name="period_id"/>
+                <field name="created_by_user"/>
+                <field name="discarded"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Attendance Log Form View -->
+    <record id="attendance_log_form_view" model="ir.ui.view">
+        <field name="name">attendance.log.form.view</field>
+        <field name="model">attendance.log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="structure_type_id"/>
+                            <field name="date_computed"/>
+                            <field name="hour_computed" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="pin" readonly="1"/>
+                            <field name="attendance_log_date"/>
+                            <field name="day_computed"/>
+                            <field name="period_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Attendance Log Pivot View -->
+    <record id="attendance_log_pivot_view" model="ir.ui.view">
+        <field name="name">attendane.log.pivot.view</field>
+        <field name="model">attendance.log</field>
+        <field name="arch" type="xml">
+            <pivot string="Attendance Log">
+                <!-- <field name="attendance_log_date" type="col" interval="day"/> -->
+                <field name="date_computed" type="col" interval="day"/>
+                <field name="employee_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Attendance Log Search View -->
+    <record id="attendance_log_search_view" model="ir.ui.view">
+        <field name="name">attendance.log.search.view</field>
+        <field name="model">attendance.log</field>
+        <field name="arch" type="xml">
+            <search string="Attendance Log Search">
+                <field name="employee_id"/>
+                <field name="pin"/>
+                <field name="structure_type_id"/>
+                <field name="department_id"/>
+                <field name="period_id"/>
+                <field name="calendar_id"/>
+                <field name="day_computed"/>
+                <field name="date_computed"/>
+                <field name="hour_computed"/>
+                <filter name="by_user" string="Created By User" domain="[('created_by_user', '=', True)]" />
+                <filter name="imported_record" string="Imported" domain="[('created_by_user', '=', False)]" />
+                <separator/>
+                <filter name="not_discarded" string="Not Discarded" domain="[('discarded', '=', False)]" />
+                <filter name="discarded" string="Discarded" domain="[('discarded', '=', True)]" />
+                <separator/>
+                <filter name="today" string="Today" domain="[('attendance_log_date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),('check_in', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+                <filter name="previous_period" string="Previous Periods" domain="[('prev_period', '=', True)]"/>
+                <filter string="Current Month" domain="[('attendance_log_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-01'))]" />
+                <separator/>
+                <filter string="My Checks" domain="[('employee_id.user_id.id', '=', uid)]" />
+                <group expand="0" string="Group By">
+                    <filter name="employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                    <separator/>
+                    <filter name="groupby_name" string="Month" context="{'group_by':'attendance_log_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Attendance Log Action -->
+    <record id="attendance_log_action" model="ir.actions.act_window">
+        <field name="name">Attendance Log</field>
+        <field name="res_model">attendance.log</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="context">{'search_default_not_discarded': True, 'search_default_previous_period': True, 'custom_datetime_format': True}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to create new Attendance Log
+            </p>
+        </field>
+    </record>
+
+    <!-- Menus -->
+
+    <menuitem id="attendance_log_menu"
+        name="Attendance Log"
+        action="attendance_log_action"
+        parent="hr_attendance.menu_hr_attendance_manage_attendances"
+        sequence="5"/>
+
+</odoo>

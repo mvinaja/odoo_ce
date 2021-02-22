@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+<t t-name="FieldMany2OneSelection">
+    <t t-if="widget.mode === 'readonly'">
+        <a t-if="!widget.noOpen" t-att-tabindex="widget.attrs.tabindex" class="o_form_uri" href="#"/>
+        <span t-if="widget.noOpen"/>
+    </t>
+    <div t-if="widget.mode === 'edit'" aria-atomic="true">
+        <a role="button" class="o_tag_button" draggable="false"><i class="fa fa-plus-circle"></i></a>
+    </div>
+</t>
+</templates>

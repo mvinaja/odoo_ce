@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_order_form_view_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.form.view.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']" position="before">
+                    <button name="%(product_configurator_wizard.action_wizard_product_configurator)s"
+                            states="draft,sent"
+                            class="oe_highlight"
+                            type="action"
+                            style="margin-top: 15px;margin-bottom: 10px;"
+                            string="Configure Product"
+                            context="{'source': 'purchase'}"
+                            groups="product_configurator.group_product_configurator"/>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
+                    <field name="config_ok" invisible="1"/>
+                    <button name="reconfigure_product" groups="product_configurator.group_product_configurator"
+                            help="Reconfigure"
+                            icon="fa-cogs"
+                            type="object"
+                            attrs="{
+                                'invisible': [
+                                    '|',
+                                    ('config_ok','=',False),
+                                    ('state','not in',['draft','sent'])
+                                ]}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

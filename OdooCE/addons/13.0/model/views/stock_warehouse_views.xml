@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_warehouse_form_view_inherit" model="ir.ui.view">
+            <field name="name">stock.warehouse.form.inherit.view</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="aci_context.stock_warehouse_form_view_inherit"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='product_categ_id']" position="attributes">
+                        <attribute name="domain">[('bom_type','=','budget')]</attribute>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

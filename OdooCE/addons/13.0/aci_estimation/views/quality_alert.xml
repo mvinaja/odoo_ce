@@ -1,0 +1,91 @@
+<odoo>
+    <record id="quality_alert_view_form_inherit_tracking" model="ir.ui.view">
+        <field name="name">quality.alert.view.form.inherit.tracking</field>
+        <field name="model">quality.alert</field>
+        <field name="inherit_id" ref="quality_control.quality_alert_view_form"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="timetracking_id" invisible="1"/>
+                <field name="type" invisible="1"/>
+                <field name="product_ids"  readonly="1" attrs="{'invisible': [('type', '=', 'normal')]}" widget="many2many_tags"/>
+                <field name="workcenter_id"  readonly="1" attrs="{'invisible': [('timetracking_id', '!=', False)]}"/>
+                <field name="lock_product" readonly="1" attrs="{'invisible': [('type', '!=', 'production')]}"/>
+            </field>
+
+            <field name="product_tmpl_id" position="replace">
+                <field name="product_tmpl_id" attrs="{'readonly': [('timetracking_id', '!=', False)]}"/>
+            </field>
+            <field name="product_id" position="replace">
+                <field name="product_id" groups="product.group_product_variant"
+                    attrs="{'readonly': [('timetracking_id', '!=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="quality_alert_view_form_tracking" model="ir.ui.view">
+        <field name="name">quality.alert.view.form.tracking</field>
+        <field name="model">quality.alert</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box">
+                        <button name="action_see_check" type="object" attrs="{'invisible': [('check_id', '=', False)]}" class="oe_stat_button" icon="fa-check-square-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="check_id" readonly="1"/></span>
+                                <span class="o_stat_text">Quality Check</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="title" readonly="1"/>
+                            <field name="product_tmpl_id" readonly="1"/>
+                            <field name="product_id" groups="product.group_product_variant" readonly="1"/>
+                            <field name="workcenter_id" readonly="1"/>
+                            <field name="lock_product"/>
+                            <field name="timetracking_id" invisible="1"/>
+                            <field name="lot_id" context="{'default_product_id': product_id}" groups="stock.group_production_lot"/>
+                        </group>
+                        <group>
+                            <field name="team_id"/>
+                            <field name="user_id"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="reason_id"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Description of the issue..."/>
+                        </page>
+                        <page string="Corrective Actions">
+                            <field name="action_corrective" placeholder="Describe the corrective actions you did..."/>
+                        </page>
+                        <page string="Preventive Actions">
+                            <field name="action_preventive" placeholder="Describe the preventive actions you did..."/>
+                        </page>
+                        <page string="Miscellaneous">
+                            <group>
+                                <group>
+                                    <field name="partner_id"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                    <field name="email_cc" groups="base.group_no_one"/>
+                                </group>
+                                <group>
+                                    <field name="date_assign"/>
+                                    <field name="date_close" attrs="{'invisible': [('date_close', '=', False)]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'open_attachments': True}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

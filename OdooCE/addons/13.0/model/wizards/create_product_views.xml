@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="create_product_wizard_form" model="ir.ui.view">
+            <field name="name">create.product.wizard.form</field>
+            <field name="model">create.product.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type" widget="radio" required="1"/>
+                                <field name="bom_count" invisible="1"/>
+                                <field name="product_count" invisible="1"/>
+                                <field name="combination_count" invisible="1"/>
+                            </group>
+                            <group>
+                                <group colspan="2" string="Templates">
+                                    <field name="source_templates" nolabel="1"
+                                        options="{'no_create': True}">
+                                        <tree>
+                                            <field name="categ_id"/>
+                                            <field name="name"/>
+                                            <field name="attribute_value_ids" widget="many2many_tags"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group colspan="2" string="Values">
+                                    <label for="source_category" colspan="2"/>
+                                    <div class="o_row" colspan="2">
+                                        Categ.<field name="source_category"
+                                            options="{'no_create': True}"/>
+                                        Attrib.<field name="source_attribute"
+                                            options="{'no_create': True}"
+                                            domain="[('category_id','=',source_category)]"/>
+                                        <field name="source_selection" widget="many2many_selection"
+                                            options="{'no_create': True}"
+                                            domain="[('attribute_id','=',source_attribute)]"/>
+                                        <button type="object" name="reset_value_btn"
+                                            class="oe_stat_button" icon="fa-trash"/>
+                                    </div>
+                                    <field name="source_values" nolabel="1"
+                                        options="{'no_create': True}">
+                                        <tree>
+                                            <field name="attribute_id"/>
+                                            <field name="name"/>
+                                            <field name="code"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Template Combinations">
+                                <field name="virtual_products" nolabel="1" colspan="2">
+                                    <tree editable="top" create="false">
+                                        <field name="template_id"/>
+                                        <field name="attribute_value_ids" widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="New Products"
+                                attrs="{'invisible': [('product_count','=',0)]}">
+                                <field name="target_products" nolabel="1" colspan="2" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="product_template_attribute_value_ids" widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button type="object" name="create_combination_btn"
+                            string="Add Combinations" class="btn-primary"/>
+                        <button type="object" name="remove_combination_btn"
+                            string="Remove Combinations" class="btn-primary"
+                            attrs="{'invisible': [('combination_count','=',0)]}"/>
+                        <button type="object" name="create_product_btn"
+                            string="Create Product" class="btn-primary"
+                            attrs="{'invisible': [('combination_count','=',0)]}"/>
+                        <button type="object" name="create_bom_btn"
+                            string="Create BoM" class="btn-primary"
+                            attrs="{'invisible': ['|', ('bom_count','=',0),('type','=','any')]}"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="create_product_wizard_action" model="ir.actions.act_window">
+            <field name="name">Create Product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.product.wizard</field>
+            <field name="target">new</field>
+            <field name="view_ids"
+               eval="[(5, 0, 0), (0, 0, {'view_mode': 'form', 'view_id': ref('create_product_wizard_form')})]"/>
+        </record>
+
+    </data>
+</odoo>

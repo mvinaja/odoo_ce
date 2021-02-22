@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="mrp_workcenter_actions_form_view" model="ir.ui.view">
+            <field name="name">mrp.workcenter.actions.form.view</field>
+            <field name="model">mrp.workcenter.actions</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group col="2">
+                        <field name="field_name" invisible="1"/>
+                        <field name="resource_calendar_id" attrs="{'invisible': [('field_name', '!=', 'resource_calendar_id')]}"/>
+                        <field name="period_group_id" attrs="{'invisible': [('field_name', '!=', 'period_group_id')]}"/>
+                    </group>
+                    <footer>
+                        <button type="object" name="change_field" string="Change" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" class="btn-default"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    <record id="mrp_workcenter_productivity_wizard_form_view" model="ir.ui.view">
+            <field name="name">mrp.workcenter.productivity.wizard.form.view</field>
+            <field name="model">mrp.workcenter.productivity.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group col="2">
+                        <field name="type" invisible="1"/>
+                        <field name="qty_status" attrs="{'invisible': [('type', 'in', ('extra', 'discount', 'deposit'))]}" readonly="1"/>
+                        <field name="estimation_id" attrs="{'invisible': [('qty_status', '=', 'pending')],
+                                                            'required': [('qty_status', '!=', 'pending')]}"
+                            options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        <field name="input_type" widget="radio" attrs="{'invisible': [('type', 'not in', ('discount', 'deposit'))]}"/>
+                        <field name="discount" attrs="{'invisible': [('type', '!=', 'discount')]}"/>
+                        <field name="deposit" attrs="{'invisible': [('type', '!=', 'deposit')]}"/>
+                        <field name="approved_extra" attrs="{'invisible': [('type', '!=', 'extra')]}"/>
+                         <div class="o_row">
+                            <p attrs="{'invisible': [('type', '!=', 'extra')]}">available: </p>
+                             <field name="workorder_extra_available" readonly="1" attrs="{'invisible': [('type', '!=', 'extra')]}"/>
+                            <p attrs="{'invisible': [('type', '!=', 'extra')]}">of</p>
+                            <field name="workorder_extra" readonly="1" attrs="{'invisible': [('type', '!=', 'extra')]}"/>
+                        </div>
+                    </group>
+                    <footer>
+                        <button type="object" name="approve_btn" string="Save" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" class="btn-default"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+</odoo>

@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+    <t t-name="KanbanTimeTracking.buttons">
+        <div class="o_cp_bottom_left">
+        <div>
+            <t t-if="widget.origin">
+<!--        FILTER INDEXES-->
+            <t t-set="idx_periodg" t-value="0"/>
+            <t t-set="idx_period" t-value="1"/>
+            <t t-set="idx_period_day" t-value="2"/>
+            <t t-set="idx_department" t-value="3"/>
+            <t t-set="idx_workcenter" t-value="4"/>
+            <t t-set="idx_analytic" t-value="5"/>
+            <t t-set="idx_wo" t-value="6"/>
+
+<!--        BUTTONS TO HIDE DIVS-->
+            <div id="filterContainer">
+                <t t-if="widget.period_group_ids.length > 0">
+                    <div id="titleContainer">
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op7_show btn btn btn-sm btn-secondary">
+                                 <i class="fa fa-angle-up" id="tracking-show-op7"  title="Display"/>
+                            </button>
+                        </div>
+                        <t t-if="widget.filters_active[idx_periodg]">
+                            <t t-set="active_class" t-value="'fa fa-check-square'"/>
+                        </t><t t-else="">
+                            <t t-set="active_class" t-value="'fa fa-square'"/>
+                        </t>
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op7_active btn btn btn-sm btn-secondary">
+                                 <i t-attf-class="{{active_class}}" id="tracking-active-op7"  title="Active"/>
+                            </button>
+                        </div>
+                        <div id="filterTitle">PGp</div>
+                    </div>
+                </t>
+                <t t-if="widget.period_ids.length > 0">
+                    <div id="titleContainer">
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op8_show btn btn btn-sm btn-secondary">
+                                 <i class="fa fa-angle-up" id="tracking-show-op8"  title="Display"/>
+                            </button>
+                        </div>
+                        <t t-if="widget.filters_active[idx_period]">
+                            <t t-set="active_class" t-value="'fa fa-check-square'"/>
+                        </t><t t-else="">
+                            <t t-set="active_class" t-value="'fa fa-square'"/>
+                        </t>
+                        <div id="filterTitle">
+                        <button class="o_kanban_time_tracking_button_op8_active btn btn btn-sm btn-secondary">
+                             <i t-attf-class="{{active_class}}" id="tracking-active-op8"  title="Active"/>
+                        </button>
+                        </div>
+                        <div id="filterTitle">Per</div>
+                    </div>
+                </t>
+                <t t-if="widget.period_day_ids.length > 0">
+                    <div id="titleContainer">
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op9_show btn btn btn-sm btn-secondary">
+                                 <i class="fa fa-angle-up" id="tracking-show-op9"  title="Display"/>
+                            </button>
+                        </div>
+                        <t t-if="widget.filters_active[idx_period_day]">
+                            <t t-set="active_class" t-value="'fa fa-check-square'"/>
+                        </t><t t-else="">
+                            <t t-set="active_class" t-value="'fa fa-square'"/>
+                        </t>
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op9_active btn btn btn-sm btn-secondary">
+                                 <i t-attf-class="{{active_class}}" id="tracking-active-op9"  title="Active"/>
+                            </button>
+                        </div>
+                        <div id="filterTitle">Day</div>
+                    </div>
+                </t>
+                <t t-if="widget.workcenter_ids.length > 0">
+                    <div id="titleContainer">
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op6_show btn btn btn-sm btn-secondary">
+                                 <i class="fa fa-angle-up" id="tracking-show-op6"  title="Display"/>
+                            </button>
+                        </div>
+                        <t t-if="widget.filters_active[idx_department]">
+                            <t t-set="active_class" t-value="'fa fa-check-square'"/>
+                        </t><t t-else="">
+                            <t t-set="active_class" t-value="'fa fa-square'"/>
+                        </t>
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op6_active btn btn btn-sm btn-secondary">
+                                 <i t-attf-class="{{active_class}}" id="tracking-active-op6"  title="Active"/>
+                            </button>
+                        </div>
+                        <div id="filterTitle">Dep</div>
+                    </div>
+                </t>
+                <t t-if="widget.workcenter_ids.length > 0">
+                    <div id="titleContainer">
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op5_show btn btn btn-sm btn-secondary">
+                                 <i class="fa fa-angle-up" id="tracking-show-op5"  title="Display"/>
+                            </button>
+                        </div>
+                        <t t-if="widget.filters_active[idx_workcenter]">
+                            <t t-set="active_class" t-value="'fa fa-check-square'"/>
+                        </t><t t-else="">
+                            <t t-set="active_class" t-value="'fa fa-square'"/>
+                        </t>
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op5_active btn btn btn-sm btn-secondary">
+                                 <i t-attf-class="{{active_class}}" id="tracking-active-op5"  title="Active"/>
+                            </button>
+                        </div>
+                        <div id="filterTitle">WkC</div>
+                    </div>
+                </t>
+                <t t-if="widget.analytic_ids.length > 0">
+                    <div id="titleContainer">
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op0_show btn btn btn-sm btn-secondary">
+                                 <i class="fa fa-angle-up" id="tracking-show-op0"  title="Display"/>
+                            </button>
+                        </div>
+                        <t t-if="widget.filters_active[idx_analytic]">
+                            <t t-set="active_class" t-value="'fa fa-check-square'"/>
+                        </t><t t-else="">
+                            <t t-set="active_class" t-value="'fa fa-square'"/>
+                        </t>
+                        <div id="filterTitle">
+                            <button class="o_kanban_time_tracking_button_op0_active btn btn btn-sm btn-secondary">
+                                 <i t-attf-class="{{active_class}}" id="tracking-active-op0"  title="Active"/>
+                            </button>
+                        </div>
+                        <div id="filterTitle">AnA</div>
+                    </div>
+                </t>
+                <t t-if="widget.workorder_ids.length > 0">
+                        <div id="titleContainer">
+                            <div id="filterTitle">
+                                <button class="o_kanban_time_tracking_button_op3_show btn btn btn-sm btn-secondary">
+                                     <i class="fa fa-angle-up" id="tracking-show-op3"  title="Display"/>
+                                </button>
+                            </div>
+                        <t t-if="widget.filters_active[idx_wo]">
+                            <t t-set="active_class" t-value="'fa fa-check-square'"/>
+                        </t><t t-else="">
+                            <t t-set="active_class" t-value="'fa fa-square'"/>
+                        </t>
+                            <div id="filterTitle">
+                                <button class="o_kanban_time_tracking_button_op3_active btn btn btn-sm btn-secondary">
+                                     <i t-attf-class="{{active_class}}" id="tracking-active-op3"  title="Active"/>
+                                </button>
+                            </div>
+                        <div id="filterTitle">WkO</div>
+                        </div>
+                </t>
+            </div>
+<!--        PERIOD GROUP-->
+            <t t-if="widget.period_group_ids.length > 0">
+                <t t-if="widget.filters_active[idx_periodg]">
+                    <t t-set="visible" t-value="''"/>
+                </t>
+                <t t-else="">
+                    <t t-set="visible" t-value="'display: none;visibility: hidden;'"/>
+                </t>
+                <div class="clearfix"/>
+                <div id="filterContainer" t-attf-style="{{visible}}">
+                <div id="dataContainer-op7">
+                    <div id="buttonContainer"> <div class="btn-group">
+                        <button class="periodg_check btn btn-sm btn-secondary">
+                             <i class="fa fa-cogs" />
+                        </button></div>
+                    </div>
+
+                    <div id="titleContainerOption">
+                        PGp
+                    </div>
+                    <div id="elementContainerGroup">
+                 <t t-foreach="widget.period_group_ids or []" t-as="pg">
+                    <t t-set="style" t-value="'font-size:14px; color:gray;'"/>
+                    <t t-foreach="widget.filters[idx_periodg] or []" t-as="sel_pg">
+                         <t t-if="pg[0] == sel_pg">
+                            <t t-set="style" t-value="'font-size:14px; color:#990000; font-weight: bold;'"/>
+                         </t>
+                    </t>
+                     <div id="elementContainer">
+                        <input type="checkbox" class="form-check-input"
+                               t-attf-id="check-to-op7-#{pg[0]}"
+                               t-attf-name="check-to-op7-#{pg[0]}"/>&#160;
+                        <a href="#" t-attf-style="{{style}}" class="periodg_link"
+                            data-res_model="aci.estimation"
+                            t-att-data-period_group_id="pg[0]">
+                             <t t-esc=" pg[1] "/>
+                        </a>/
+                     </div>
+                 </t></div>
+                    </div>
+                </div>
+             </t>
+<!--        PERIOD-->
+            <t t-if="widget.period_ids.length > 0">
+                <t t-if="widget.filters_active[idx_period]">
+                    <t t-set="visible" t-value="''"/>
+                </t>
+                <t t-else="">
+                    <t t-set="visible" t-value="'display: none;visibility: hidden;'"/>
+                </t>
+                <div class="clearfix"/>
+                <div id="filterContainer" t-attf-style="{{visible}}">
+                <div id="dataContainer-op8">
+                    <div id="buttonContainer"> <div class="btn-group">
+                        <button class="period_check btn btn-sm btn-secondary">
+                             <i class="fa fa-cogs" />
+                        </button></div>
+                    </div>
+                    <div id="titleContainerOption">
+                        Per
+                    </div>
+
+                    <div id="elementContainerGroup">
+                 <t t-foreach="widget.period_ids or []" t-as="per">
+                    <t t-set="style" t-value="'font-size:14px; color:gray;'"/>
+                    <t t-foreach="widget.filters[idx_period] or []" t-as="sel_per">
+                         <t t-if="per[0] == sel_per">
+                            <t t-set="style" t-value="'font-size:14px; color:#990000; font-weight: bold;'"/>
+                         </t>
+                    </t>
+                     <div id="elementContainer">
+                        <input type="checkbox" class="form-check-input"
+                               t-attf-id="check-to-op8-#{per[0]}"
+                               t-attf-name="check-to-op8-#{per[0]}"/>&#160;
+                        <a href="#" t-attf-style="{{style}}" class="period_link"
+                            data-res_model="aci.estimation"
+                            t-att-data-period_id="per[0]">
+                             <t t-esc=" per[1] "/>
+                        </a>/
+                     </div>
+                 </t></div>
+                    </div>
+                </div>
+             </t>
+<!--        PERIOD DAY-->
+            <t t-if="widget.period_day_ids.length > 0">
+                <t t-if="widget.filters_active[idx_period_day]">
+                    <t t-set="visible" t-value="''"/>
+                </t>
+                <t t-else="">
+                    <t t-set="visible" t-value="'display: none;visibility: hidden;'"/>
+                </t>
+                <div class="clearfix"/>
+                <div id="filterContainer" t-attf-style="{{visible}}">
+                <div id="dataContainer-op9">
+                    <div id="buttonContainer"> <div class="btn-group">
+                        <button class="period_day_check btn btn-sm btn-secondary">
+                             <i class="fa fa-cogs" />
+                        </button></div>
+                    </div>
+                    <div id="titleContainerOption">
+                        Day
+                    </div>
+
+                    <div id="elementContainerGroup">
+                 <t t-foreach="widget.period_day_ids or []" t-as="per">
+                    <t t-set="style" t-value="'font-size:14px; color:gray;'"/>
+                    <t t-foreach="widget.filters[idx_period_day] or []" t-as="sel_per">
+                         <t t-if="per[0] == sel_per">
+                            <t t-set="style" t-value="'font-size:14px; color:#990000; font-weight: bold;'"/>
+                         </t>
+                    </t>
+                     <div id="elementContainer">
+                        <input type="checkbox" class="form-check-input"
+                               t-attf-id="check-to-op9-#{per[0]}"
+                               t-attf-name="check-to-op9-#{per[0]}"/>&#160;
+                        <a href="#" t-attf-style="{{style}}" class="period_day_link"
+                            data-res_model="aci.estimation"
+                            t-att-data-period_day_id="per[0]">
+                             <t t-esc=" per[1] "/>
+                        </a>/
+                     </div>
+                 </t></div>
+                    </div>
+                </div>
+             </t>
+<!--        DEPARTMENT-->
+            <t t-if="widget.department_ids.length > 0">
+                <t t-if="widget.filters_active[idx_department]">
+                    <t t-set="visible" t-value="''"/>
+                </t>
+                <t t-else="">
+                    <t t-set="visible" t-value="'display: none;visibility: hidden;'"/>
+                </t>
+                <div class="clearfix"/>
+                <div id="filterContainer"  t-attf-style="{{visible}}">
+                <div id="dataContainer-op6">
+                    <div id="buttonContainer"> <div class="btn-group">
+                        <button class="department_check btn btn-sm btn-secondary">
+                             <i class="fa fa-cogs" />
+                        </button></div>
+                    </div>
+                    <div id="titleContainerOption">
+                        Dep
+                    </div>
+
+                    <div id="elementContainerGroup">
+                 <t t-foreach="widget.department_ids or []" t-as="dep">
+                    <t t-set="style" t-value="'font-size:14px; color:gray;'"/>
+                    <t t-foreach="widget.filters[idx_department] or []" t-as="sel_dep">
+                         <t t-if="dep[0] == sel_dep">
+                            <t t-set="style" t-value="'font-size:14px; color:#990000; font-weight: bold;'"/>
+                         </t>
+                    </t>
+                     <div id="elementContainer">
+                        <input type="checkbox" class="form-check-input"
+                               t-attf-id="check-to-op6-#{dep[0]}"
+                               t-attf-name="check-to-op6-#{dep[0]}"/>&#160;
+                        <a href="#" t-attf-style="{{style}}" class="department_link"
+                            data-res_model="aci.estimation"
+                            t-att-data-department_id="dep[0]">
+                             <t t-esc=" dep[1] "/>
+                        </a>/
+                     </div>
+                 </t></div>
+                    </div>
+                </div>
+             </t>
+<!--        WORKCENTER-->
+            <t t-if="widget.workcenter_ids.length > 0">
+                <t t-if="widget.filters_active[idx_workcenter]">
+                    <t t-set="visible" t-value="''"/>
+                </t>
+                <t t-else="">
+                    <t t-set="visible" t-value="'display: none;visibility: hidden;'"/>
+                </t>
+                <div class="clearfix"/>
+                <div id="filterContainer" t-attf-style="{{visible}}">
+                <div id="dataContainer-op5">
+                    <div id="buttonContainer"> <div class="btn-group">
+                        <button class="workcenter_check btn btn-sm btn-secondary">
+                             <i class="fa fa-cogs" />
+                        </button></div>
+                    </div>
+                    <div id="titleContainerOption">
+                        Wkc
+                    </div>
+
+                    <div id="elementContainerGroup">
+                 <t t-foreach="widget.workcenter_ids or []" t-as="wc">
+                    <t t-set="style" t-value="'font-size:14px; color:gray;'"/>
+                    <t t-foreach="widget.filters[idx_workcenter] or []" t-as="sel_wc">
+                         <t t-if="wc[0] == sel_wc">
+                            <t t-set="style" t-value="'font-size:14px; color:#990000; font-weight: bold;'"/>
+                         </t>
+                    </t>
+
+                    <div id="elementContainer">
+                        <input type="checkbox" class="form-check-input"
+                               t-attf-id="check-to-op5-#{wc[0]}"
+                               t-attf-name="check-to-op5-#{wc[0]}"/>&#160;
+                        <a href="#" t-attf-style="{{style}}" class="workcenter_link"
+                            data-res_model="aci.estimation"
+                            t-att-data-workcenter_id="wc[0]">
+                             <t t-esc=" wc[1] "/>
+                        </a>/
+                    </div>
+                 </t></div>
+                    </div>
+                </div>
+             </t>
+            <t t-if="widget.analytic_ids.length > 0">
+                <t t-if="widget.filters_active[idx_analytic]">
+                    <t t-set="visible" t-value="''"/>
+                </t>
+                <t t-else="">
+                    <t t-set="visible" t-value="'display: none;visibility: hidden;'"/>
+                </t>
+                <div class="clearfix"/>
+                <div id="filterContainer" t-attf-style="{{visible}}">
+                <div id="dataContainer-op0">
+                    <div id="buttonContainer"> <div class="btn-group">
+                        <button class="analytic_check btn btn-sm btn-secondary">
+                             <i class="fa fa-cogs" />
+                        </button></div>
+                    </div>
+                    <div id="titleContainerOption">
+                        AnA
+                    </div>
+
+                    <div id="elementContainerGroup">
+                    <t t-foreach="widget.analytic_ids or []" t-as="pro">
+                         <t t-set="style" t-value="'font-size:14px; color:gray;'"/>
+                         <t t-foreach="widget.filters[idx_analytic] or []" t-as="sel_pro">
+                             <t t-if="pro[0] == sel_pro">
+                                <t t-set="style" t-value="'font-size:14px; color:#990000; font-weight: bold;'"/>
+                             </t>
+                         </t>
+                        <div id="elementContainer">
+                            <input type="checkbox" class="form-check-input"
+                               t-attf-id="check-to-op0-#{pro[0]}"
+                               t-attf-name="check-to-op0-#{pro[0]}"/>&#160;
+                             <a href="#"  t-attf-style="{{style}}" class="analytic_link"
+                                data-res_model="aci.estimation"
+                                t-att-data-analytic_id="pro[0]">
+                                    <t t-esc=" pro[1] "/> /
+                             </a>
+                        </div>
+                    </t></div>
+                    </div>
+                </div>
+             </t>
+<!--        WORKORDER-->
+            <t t-if="widget.workorder_ids.length > 0">
+                <t t-if="widget.filters_active[idx_wo]">
+                    <t t-set="visible" t-value="''"/>
+                </t>
+                <t t-else="">
+                    <t t-set="visible" t-value="'display: none;visibility: hidden;'"/>
+                </t>
+                <div class="clearfix"/>
+                <div id="filterContainer" t-attf-style="{{visible}}">
+                <div id="dataContainer-op3">
+                    <div id="buttonContainer">
+                        <div class="btn-group">
+                            <button class="wo_check btn btn-sm btn-secondary">
+                                <i class="fa fa-cogs" />
+                            </button>
+                        </div>
+                    </div>
+                    <div id="titleContainerOption">
+                        WkO
+                    </div>
+                    <div id="elementContainerGroup">
+                       <t t-foreach="widget.workorder_ids or []" t-as="wo">
+                        <t t-set="style" t-value="'font-size:14px; color:gray;'"/>
+                        <t t-foreach="widget.filters[idx_wo] or []" t-as="sel_wo">
+                             <t t-if="wo[0] == sel_wo">
+                                <t t-set="style" t-value="'font-size:14px; color:#990000; font-weight: bold;'"/>
+                             </t>
+                        </t>
+                     <div id="elementContainer">
+                        <input type="checkbox" class="form-check-input"
+                               t-attf-id="check-to-op3-#{wo[0]}"
+                               t-attf-name="check-to-op3-#{wo[0]}"/>&#160;
+                        <a href="#" t-attf-style="{{style}}" class="wo_link"
+                            data-res_model="aci.estimation"
+                            t-att-data-workorder_id="wo[0]">
+                             <t t-esc=" wo[1] "/>
+                        </a>/
+                     </div>
+                </t>
+                    </div>
+                </div>
+                </div>
+             </t>
+            </t>
+        </div></div>
+    </t>
+
+</templates>
+

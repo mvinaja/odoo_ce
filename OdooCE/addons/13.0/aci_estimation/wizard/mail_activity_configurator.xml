@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_activity_configurator_form_view" model="ir.ui.view">
+        <field name="name">mail.activity.configurator.form.view</field>
+        <field name="model">mail.activity.configurator</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group col="2" colspan="1" string="Activity Template">
+                        <group>
+                            <field name="activity_source" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="activity_type_id"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="date_deadline"/>
+                            <label for="summary"/>
+                            <div class="o_row">
+                                <field name="summary"/>
+                                <button type="object" name="load_text_view_btn" class="oe_stat_button" icon="fa-pencil"/>
+                            </div>
+                            <field name="user_id" attrs="{'invisible': [('activity_source', '!=', 'normal')]}"
+                                options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                    <group col="4" colspan="1" string="Extra Configuration"
+                           attrs="{'invisible': [('activity_source', '=', 'normal')]}">
+                            <field name="category_id"
+                               attrs="{'invisible': [('activity_source', '=', 'normal')]}"
+                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="product_id"
+                               attrs="{'invisible': [('activity_source', '=', 'normal')]}"
+                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="department_id"
+                               attrs="{'invisible': [('activity_source', '=', 'normal')]}"
+                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="workcenter_ids" widget="many2many_tags"
+                               attrs="{'invisible': [('activity_source', '=', 'normal')]}"
+                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"
+                               domain="[('resource_type', '=', 'alternative'),
+                                        ('department_id', '=', department_id),
+                                        ('period_group_id', '!=', False),
+                                        ('contract_id', '!=', False)]"/>
+                            <field name="analytic_id"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"
+                                   attrs="{'invisible': [('activity_source', '=', 'normal')]}"/>
+                            <field name="send_to_tracking"
+                                   attrs="{'invisible': [('activity_source', '=', 'normal')]}"/>
+                            <field name="tracking_state" widget="radio"/>
+                    </group>
+                    <button type="object" name="load_activity_btn" icon="fa-plus-circle"
+                        class="btn btn-primary">
+                        <span>Add</span>
+                    </button>
+                    <group>
+                        <group string="Records">
+                            <div class="o_row" colspan="2">
+                                <button type="object" name="reset_record_btn" class="oe_stat_button" icon="fa-trash"/>
+                            </div>
+                            <div class="o_row" colspan="2">
+                            <field name="res_ids" nolabel="1">
+                                <tree editable="bottom"  decoration-danger="res_name == 'NotFound'"
+                                decoration-info="to_clone is True">
+                                    <field name="to_clone" invisible="1"/>
+                                    <field name="res_model_id"/>
+                                    <field name="res_id" string="ID"/>
+                                    <field name="res_name"/>
+                                    <field name="analytic_id"/>
+                                    <button type="object" name="load_activity_btn"
+                                            class="oe_stat_button" icon="fa-arrow-up"
+                                     attrs="{'invisible': [('res_name', '=', 'NotFound')]}"/>
+                                </tree>
+                            </field>
+                            </div>
+                        </group>
+                        <group string="Activity">
+                            <div class="o_row"  colspan="2">
+                                <button type="object" name="reset_activity_btn" class="oe_stat_button" icon="fa-trash"/>
+                            </div>
+                            <div class="o_row" colspan="2">
+                                <field name="activity_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="activity_source" optional="show"/>
+                                        <field name="activity_type_id" optional="hidden"
+                                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                        <field name="date_deadline" optional="hidden"/>
+                                        <field name="summary" optional="hidden"/>
+                                        <field name="user_id" optional="show"
+                                               attrs="{'invisible': [('activity_source', '!=', 'normal')]}"/>
+                                        <field name="category_id" optional="show"
+                                               attrs="{'invisible': [('activity_source', '=', 'normal')],
+                                       'required': [('activity_source', '!=', 'normal')]}"
+                                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                        <field name="product_id" optional="show"
+                                               attrs="{'invisible': [('activity_source', '=', 'normal')],
+                                           'required': [('activity_source', '!=', 'normal')]}"
+                                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                        <field name="department_id" optional="hidden"
+                                               attrs="{'invisible': [('activity_source', '=', 'normal')],
+                                       'required': [('activity_source', '!=', 'normal')]}"
+                                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                        <field name="workcenter_ids" optional="show" widget="many2many_tags"
+                                               attrs="{'invisible': [('activity_source', '=', 'normal')],
+                                       'required': [('activity_source', '!=', 'normal')]}"
+                                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"
+                                               domain="[('resource_type', '=', 'alternative'),
+                                        ('department_id', '=', department_id),
+                                        ('period_group_id', '!=', False),
+                                        ('contract_id', '!=', False)]"/>
+                                        <field name="note" placeholder="Log a note..."/>
+                                        <field name="tracking_state" optional="hidden"/>
+                                        <field name="send_to_tracking" optional="hidden"
+                                                attrs="{'invisible': [('activity_source', '=', 'normal')]}"/>
+                                        <field name="analytic_id" optional="show"
+                                               options="{'no_create': True, 'no_edit': True, 'no_open': True}"
+                                               attrs="{'invisible': [('activity_source', '=', 'normal')],
+                                           'required': [('activity_source', '!=', 'normal')]}"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </group>
+                    </group>
+                    </sheet>
+                <footer>
+                    <button name="create_activity_btn" type="object" string="Create"
+                        class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <record id="mail_activity_configurator_text_form_view" model="ir.ui.view">
+        <field name="name">mail.activity.configurator.text.form.view</field>
+        <field name="model">mail.activity.configurator</field>
+        <field name="arch" type="xml">
+            <form>
+               <sheet>
+                    <group col="2" colspan="1">
+                        <field name="summary"/>
+                        <field name="note" placeholder="Log a Note ..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="go_back_btn" type="object" string="Go Back"
+                        class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

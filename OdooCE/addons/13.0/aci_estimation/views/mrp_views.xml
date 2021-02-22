@@ -1,0 +1,882 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="mrp_workcenter_alternative_tree_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.workcenter.alternative.tree.inherit</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="aci_product.mrp_workcenter_alternative_tree_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="action">
+                        [ {
+                                "name": "Change Calendar",
+                                "act": "change_calendar_btn",
+                                "res_model": "mrp.workcenter.actions",
+                                "mode": "model",
+                                "views": [{"module": "aci_estimation", "xml_id": "mrp_workcenter_actions_form_view", "type": "form"}],
+                                "context": {"default_field_name": "resource_calendar_id"}
+                           },{
+                                "name": "Change Per.G",
+                                "act": "change_period_group_btn",
+                                "res_model": "mrp.workcenter.actions",
+                                "mode": "model",
+                                "views": [{"module": "aci_estimation", "xml_id": "mrp_workcenter_actions_form_view", "type": "form"}],
+                                "context": {"default_field_name": "period_group_id"}
+                           },
+                        {
+                            "name": "Change Est.Type",
+                            "act": "button_change_est_type",
+                            "method": "button_change_est_type",
+                            "src_model": "mrp.workcenter"
+                    },
+                        {
+                            "name": "Change Role",
+                            "act": "button_change_role",
+                            "method": "button_change_role",
+                            "src_model": "mrp.workcenter"
+                    },
+                        {
+                            "name": "Set Oper.",
+                            "act": "button_change_set_operators",
+                            "method": "button_change_set_operators",
+                            "src_model": "mrp.workcenter"
+                    }
+                        ]
+                    </attribute>
+                </xpath>
+                <field name="code" position="after">
+                    <button name="open_form" icon="fa-external-link" type="object" help="Open"/>
+                </field>
+                <field name="resource_calendar_id" position="after">
+                    <field name="period_group_id"/>
+                    <field name="estimation_type"/>
+                    <field name="resource_type" invisible="1"/>
+                    <field name="workcenter_role" attrs="{'invisible': [('resource_type','=', 'template')]}"/>
+                    <field name="set_operators" attrs="{'invisible': [('resource_type','=', 'template')]}"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record id="view_mrp_workcenter_search_inherit" model="ir.ui.view">
+        <field name="name">mrp.workcenter.search.inherit</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.view_mrp_workcenter_search"/>
+        <field name="arch" type="xml">
+            <data>
+                <filter name="archived" position="before">
+                    <field name="department_id"/>
+                    <field name="contract_department_id" string="Department(Contract)"/>
+                    <field name="employee_id"/>
+                    <field name="code"/>
+                    <field name="contract_id"/>
+                    <filter name="without_contract" string="Without Contract"
+                            domain="[('contract_id', '=', False)]"/>
+                    <filter name="with_contract" string="With Contract"
+                            domain="[('contract_id', '!=', False)]"/>
+                </filter>
+            </data>
+        </field>
+    </record>
+
+    <record id="mrp_workcenter_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.workcenter.view.form.inherit</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="resource_calendar_id" position="after">
+                    <field name="contract_id" attrs="{'invisible': [('resource_type','=', 'template')]}"/>
+                    <field name="period_group_id" attrs="{'invisible': [('resource_type','=', 'template')]}"/>
+                    <field name="estimation_type" attrs="{'invisible': [('resource_type','=', 'template')]}"/>
+                    <field name="template_id" attrs="{'invisible': [('resource_type','=', 'template')]}"/>
+                    <field name="workcenter_role" attrs="{'invisible': [('resource_type','=', 'template')]}"/>
+                </field>
+               <xpath expr="//notebook" position="inside">
+                   <field name="resource_type" invisible="1"/>
+                    <page string="Operators">
+                        <group>
+                            <group>
+                                <field name="set_operators" string="Operators on Inputs"/>
+                            </group>
+                            <group>
+                                <button name="get_template_employee_btn" type="object" string="Template Employees"
+                                        class="oe_stat_button" widget="statinfo"  icon="fa-users" help="Bring employees from Workcenter template"
+                                        attrs="{'invisible': [('resource_type', '=', 'template')]}"/>
+                            </group>
+                        </group>
+                        <field name="employee_ids" nolabel="1"
+                        context="{'default_department_id' : department_id}">
+                            <tree editable="bottom">
+                                <field name="department_id"/>
+                                <field name="name" domain="[('department_id', '=', department_id)]"/>
+                            </tree>
+                        </field>
+                    </page>
+               </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mrp_workorder_component_tree_view" model="ir.ui.view">
+        <field name="name">mrp.workorder.component.tree.view</field>
+        <field name="model">mrp.workorder.component</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom"
+                action='[{
+                    "name": "Explode Component",
+                    "act": "explode_component_btn",
+                    "method": "update_explosion",
+                    "model": "mrp.workorder.component"
+                }]'>
+                <field name="wbs_key"/>
+                <field name="party_id" options="{'no_create': True}"/>
+                <field name="product_id"/>
+                <field name="type" readonly="1"/>
+                <field name="bom_id"/>
+                <field name="line_id"/>
+                <field name="effective_qty"/>
+                <field name="product_uom_id"/>
+                <field name="unit_price"/>
+                <field name="component_price" sum="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="mrp_workorder_explosion_tree_view" model="ir.ui.view">
+        <field name="name">mrp.workorder.explosion.tree.view</field>
+        <field name="model">mrp.workorder.explosion</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="party_id" readonly="1" options="{'no_create': True}"/>
+                <field name="product_id" readonly="1"/>
+                <field name="product_qty" readonly="1"/>
+                <field name="product_uom_id" readonly="1"/>
+                <field name="context_price" readonly="1" widget="monetary"  optional="show"/>
+                <field name="product_context_cost" readonly="1"  widget="monetary"  optional="show"/>
+            </tree>
+        </field>
+    </record>
+    <record id="mrp_production_search_inherit" model="ir.ui.view">
+          <field name="name">mrp.production.search.inherit</field>
+          <field name="model">mrp.production</field>
+          <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+          <field name="arch" type="xml">
+              <field name="name" position="before">
+                  <field name="project_id" string="Location"/>
+              </field>
+          </field>
+      </record>
+
+    <record id="mrp_production_tree_estimation_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.inherit.view.tree</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="aci_lbm_flowline.mrp_production_tree_view_inherit"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="action">
+                        [{
+                                "name": "Assign Baseline",
+                                "act": "assign_baseline_btn",
+                                "action": "aci_lbm_flowline.assign_baseline_wizard_action"
+                            },{
+                                "name": "Update Sequence",
+                                "act": "update_sequence_btn",
+                                "action": "aci_product.update_sequence_action",
+                                "context": {"active_model": "mrp.production"}
+                            },{
+                                "name": "Compute Workcenter",
+                                "act": "compute_workcenter_btn",
+                                "method": "compute_workcenter_btn",
+                                "src_model": "mrp.production"
+                            },{
+                                "name": "Add Supervisor",
+                                "act": "add_supervisor_btn",
+                                "views": [{"module": "aci_estimation", "xml_id":
+                                "add_manufacturing_supervisor_form_view", "type": "form"}],
+                                "res_model": "mrp.production.actions",
+                                "src_model": "mrp.production"
+                            },{
+                                "name": "Update Gantt",
+                                "act": "update_gantt_btn",
+                                "method": "copy_gantt",
+                                "model": "mrp.production"
+                            },{
+                                "name": "Update Production",
+                                "act": "update_production_btn",
+                                "action": "aci_lbm_flowline.update_production_wizard_action",
+                                "context": {"default_type": "model"}}
+                        ]
+                    </attribute>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="mrp_production_form_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.inherit.view.form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="aci_lbm_flowline.mrp_production_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <data>
+                    <field name="context_warehouse" position="after">
+                        <field name="supervisor_ids" widget="many2many_tags"/>
+                    </field>
+<!--                    <xpath expr="//button[@name='action_confirm']" position="after">-->
+<!--                        <button name="delete_tracking_btn"-->
+<!--                                string="Reset Tracking"-->
+<!--                                icon="fa-calendar-times-o"-->
+<!--                                type="object"-->
+<!--                                help="Delete Inputs"-->
+<!--                                groups="aci_estimation.group_estimation_chief"/>-->
+<!--                    </xpath>-->
+            </data>
+        </field>
+    </record>
+    <record id="view_mrp_production_work_order_search_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.work.order.search.inherit</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_workorder_form_view_filter"/>
+        <field name="model">mrp.workorder</field>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <field name="party_wo_id" string="Party"/>
+                <field name="analytic_id" string="Analytic Account"/>
+                <field name="version" string="Version"/>
+                <field name="categ_id" string="Category"/>
+                <field name="product_wo" string="Product Wo"/>
+                <filter name="lookahead" string="In LookAHead" domain="[('lookahead_active', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="mrp_workorder_pivot_view" model="ir.ui.view">
+        <field name="name">mrp.workorder.pivot.view</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.workcenter_line_pivot"/>
+        <field name="arch" type="xml">
+             <xpath expr="//pivot" position="replace">
+            <pivot>
+                <field name="percent_complete" type="measure" colored="colored"/>
+                <field name="analytic_id" type="row"/>
+                <field name="party_id" type="col"/>
+                <field name="product_wo_tmpl" type="col"/>
+            </pivot>
+             </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_workorder_monitoring_search_view" model="ir.ui.view">
+        <field name="name">mrp.workorder.monitoring.search.view</field>
+        <field name="model">mrp.workorder.monitoring</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="period_id"/>
+                <field name="analytic_id"/>
+                <field name="party_id"/>
+                <field name="product_tmpl_id"/>
+                <field name="product_id"/>
+                <field name="workcenter_id"/>
+            </search>
+        </field>
+    </record>
+
+     <record id="mrp_workorder_monitoring_pivot_view" model="ir.ui.view">
+        <field name="name">mrp.workorder.monitoring.pivot.view</field>
+        <field name="model">mrp.workorder.monitoring</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="planned_progress" type="measure" colored="inverted"/>
+                <field name="on_estimation" type="measure" colored="boolean"/>
+                <field name="progress" type="measure" colored="colored"/>
+                <field name="analytic_id" type="row"/>
+                <field name="party_id" type="col"/>
+                <field name="product_tmpl_id" type="col"/>
+                <field name="workcenter_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+     <record id="mrp_workorder_monitoring_tree_view" model="ir.ui.view">
+        <field name="name">mrp.workorder.monitoring.tree.view</field>
+        <field name="model">mrp.workorder.monitoring</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="period_id"/>
+                <field name="party_id"/>
+                <field name="analytic_id"/>
+                <field name="product_tmpl_id"/>
+                <field name="product_id"/>
+                <field name="workcenter_id"/>
+                <field name="progress"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="mrp_workorder_tracks_form_view">
+        <field name="name">mrp.workorder.tracks.form.view</field>
+        <field name="model">mrp.workorder</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Workorder Tracking">
+                           <field name="tracking_ids" nolabel="1">
+                           <tree create="false" editable="top" delete="false" decoration-danger="is_productivity==False">
+                                <field name="date_start" readonly="1"/>
+                                <field name="type_analytic" invisible="1"/>
+                                <field name="type_qty" invisible="1"/>
+                                <field name="offset_start_date" invisible="1"/>
+                                <field name="final_start_date" readonly="1"/>
+                                <field name="date_end" readonly="1"/>
+                                <field name="offset_end_date" invisible="1"/>
+                                <field name="final_end_date" readonly="1"/>
+                                <field name="duration" readonly="1" widget="float_time"/>
+                                <field name="qty_progress" readonly="1"
+                                    attrs="{'required': [('qty_operators', '!=', False), ('qty_operators', '>', 0)]}"/>
+                                <field name="rate_uom"/>
+                                <field name="qty_operators" readonly="1"
+                                    attrs="{'required': [('qty_progress', '!=', False), ('qty_progress', '>', 0)]}"/>
+                                <field name="resource_id" readonly="1" string="Work Center"/>
+                                <field name="loss_id" readonly="1" string="Efficiency"/>
+                                <field name="is_productivity" invisible="1"/>
+                                <field name="analytic_id" readonly="1"/>
+                                <field name="period_id" readonly="1" options="{'no_open': True}"/>
+                                <button name="button_delete_tracking" icon="fa-trash" type="object"
+                                    help="Delete imputed of time"
+                                    attrs="{'invisible': [
+                                        ('final_end_date', '!=', False)
+                                    ]}"/>
+                                <button name="button_show_track_detail" icon="fa-eye" type="object"
+                                    help="Show tracking detail"
+                                    attrs="{'invisible': [
+                                        ('is_productivity', '=', True)
+                                    ]}"/>
+                               <button name="open_form" icon="fa-external-link-square" type="object" help="Open"/>
+                            </tree>
+                        </field>
+                    </group>
+                  </sheet>
+                <footer><!-- invisible="context.get('is_readonly', False)-->
+                    <button string="Save" name="button_save_trackings" type="object" class="btn btn-primary" /><!--confirm="Se deshabilitarán los Qty_progress y Qty_operators despues de confirmar."-->
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="mrp.mrp_production_workorder_form_view_inherit">
+        <field name="name">mrp_production_workorder_form_view_inherit</field>
+        <field name="model">mrp.workorder</field>
+        <field name="arch" type="xml">
+            <form string="Production Workcenter" delete="0" create="0">
+            <header>
+                <field name="is_user_working" invisible="1"/>
+                <field name="working_state" invisible="1"/>
+                <field name="production_state" invisible="1"/>
+                <button name="button_finish" type="object" string="Finish Order" attrs="{'invisible': ['|', ('state', '!=', 'progress'), ('is_produced', '=', False)]}" class="btn-info"/>
+                <button name="button_start" type="object" string="Start Working" attrs="{'invisible': ['|', ('working_state', '=', 'blocked'), ('state', '!=', 'pending')]}"/>
+                <button name="button_start" type="object" string="Start Working" attrs="{'invisible': ['|', ('working_state', '=', 'blocked'), ('state', '!=', 'ready')]}" class="btn-success"/>
+                <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', '|', '|', ('is_produced', '=', True), ('working_state', '=', 'blocked'), ('state', '!=', 'progress'), ('is_user_working', '=', False)]}"/>
+                <button name="button_pending" type="object" string="Pause" class="btn-warning" attrs="{'invisible': ['|', '|', ('working_state', '=', 'blocked'), ('state', 'in', ('done', 'pending', 'ready', 'cancel')), ('is_user_working', '=', False)]}"/>
+                <button name="%(mrp.act_mrp_block_workcenter_wo)d" type="action" context="{'default_workcenter_id': workcenter_id}" string="Block" class="btn-danger" attrs="{'invisible': ['|', '|', ('working_state', '=', 'blocked'), ('state', 'in', ('done', 'pending', 'ready', 'cancel')), ('is_user_working', '=', False)]}"/>
+                <button name="button_unblock" type="object" string="Unblock" class="btn-danger" attrs="{'invisible': [('working_state', '!=', 'blocked')]}"/>
+                <button name="button_start" type="object" string="Continue Production" attrs="{'invisible': ['|', '|', '|', ('production_state', '=', 'done'), ('working_state', '=', 'blocked'), ('is_user_working', '=', True), ('state', '!=', 'progress')]}"/>
+                <button name="button_scrap" type="object" string="Scrap" attrs="{'invisible': [('state', 'in', ('done', 'cancel'))]}"/>
+                <button type="object" string="Compute Worksteps" name="compute_operation_data"/>
+                <button type="object" string="Add Workstep" name="add_workstep_btn"/>
+                <button type="object" string="Export Workstep" name="export_workstep_btn"/>
+                <field name="state" widget="statusbar" statusbar_visible="pending,ready,progress,done"/>
+            </header>
+            <sheet>
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" name="action_see_move_scrap" type="object" icon="fa-arrows-v" attrs="{'invisible': [('scrap_count', '=', 0)]}">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value"><field name="scrap_count"/></span>
+                            <span class="o_stat_text">Scraps</span>
+                        </div>
+                    </button>
+                </div>
+                <group>
+                    <group colspan="1" col="1">
+                        <h2><field name="product_wo" string="product"/></h2>
+                        <h3><field name="product_id" string="To Produce"/></h3>
+                    </group>
+                    <group>
+                        <field name="stage_id" invisible="1"/>
+                        <label for="qty_produced" string="Quantity Produced"/>
+                        <div class="o_row">
+                            <field name="qty_produced"/> /
+                            <field name="qty_production"/>
+                            <field name="product_uom_id"/>
+                            <field name="production_availability" nolabel="1" widget="bullet_state" options="{'classes': {'assigned': 'success', 'waiting': 'danger'}}" attrs="{'invisible': [('state', '=', 'done')]}"/>
+                        </div>
+                        <field name="is_produced" invisible="1"/>
+                        <group>
+                            <label for="quality_restriction"/>
+                            <div class="o_row">
+                                <field name="quality_restriction"/>
+                                <button type="object" name="quality_configurator_btn" icon="fa-cogs"
+                                                        class="btn btn-default"/>
+                            </div>
+                            <field name="manual_update"/>
+                            <field name="direct_cost"
+                                groups="aci_estimation.group_estimation_chief"
+                                attrs="{'readonly': [('manual_update', '=', False)]}"/>
+                            <field name="operation_extra"
+                                groups="aci_estimation.group_estimation_chief"
+                                attrs="{'readonly': [('manual_update', '=', False)]}"/>
+                            <field name="operation_labor" readonly="1"
+                                groups="aci_estimation.group_estimation_chief"/>
+                            <field name="labor_cost" invisible="1"
+                                groups="aci_estimation.group_estimation_chief"/>
+                            <field name="operation_fasar" invisible="1"
+                                groups="aci_estimation.group_estimation_chief"/>
+                            <field name="crew_amount" readonly="1"
+                                groups="aci_estimation.group_estimation_chief"/>
+                        </group>
+                        <label for="tracking_duration_expected"/>
+                        <div class="o_row">
+                            <field name="tracking_duration_expected" widget="float_time" readonly="1"/>
+                            <span>minutes</span>
+                        </div>
+                    </group>
+                </group>
+                <notebook>
+                <page string="Work Instruction" attrs="{'invisible': [('worksheet', '=', False),('worksheet_google_slide', '=', False)]}">
+                    <field name="worksheet_type" invisible="1"/>
+                    <field name="worksheet_google_slide" widget="embed_viewer" attrs="{'invisible': [('worksheet_type', '=', 'pdf')]}"/>
+                    <field name="worksheet" widget="pdf_viewer" attrs="{'invisible': [('worksheet_type', '=', 'google_slide')]}"/>
+                </page>
+                <page string="Current Production">
+                    <group>
+                        <group>
+                            <field name="qty_producing" string="Quantity in Production" attrs="{'readonly': ['|', ('product_tracking', '=', 'serial'), ('state', 'in', ('done', 'cancel'))]}"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="finished_lot_id" context="{'default_product_id': product_id, 'default_company_id': company_id}" attrs="{'invisible': [('product_tracking', '=', 'none')]}" groups="stock.group_production_lot"/>
+                            <field name="product_tracking" invisible="1"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Time Tracking" groups="mrp.group_mrp_manager">
+                    <group>
+                        <group>
+                            <label for="date_planned_start" string="Planned Date"/>
+                            <div class="o_row">
+                                <field name="date_planned_start" class="mr8"/>
+                                <div attrs="{'invisible': [('date_planned_start', '=', False)]}" class="o_row">
+                                    <strong attrs="{'invisible': [('date_planned_finished', '=', False)]}" class="mr8">to</strong>
+                                    <strong class="oe_edit_only mr8" attrs="{'invisible': [('date_planned_finished', '!=', False)]}">to</strong>
+                                    <field name="date_planned_finished"/>
+                                </div>
+                            </div>
+                            <label for="date_start" string="Effective Date"/>
+                            <div class="o_row">
+                                <field name="date_start" readonly="1"/>
+                                <div  attrs="{'invisible': [('date_finished', '=', False)]}">
+                                    <strong class="mr8">to</strong>
+                                    <field name="date_finished" readonly="1"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group>
+                            <label for="duration_expected"/>
+                            <div>
+                                <field name="duration_expected" widget="float_time" class="oe_inline"/>
+                                minutes
+                            </div>
+                            <label for="duration"/>
+                            <div>
+                                <button style="pointer-events: none;" class="oe_inline badge badge-secondary">
+                                    <field name="duration" widget="mrp_time_counter" help="Time the currently logged user spent on this workorder."/>
+                                </button>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                <group colspan="1" col="4">
+                    <field name="active_restriction"/>
+                    <field name="can_be_planned"/>
+                    <field name="percent_wo_complete" widget="percentpie" nolabel="1"/>
+                    <field name="percent_step_complete" widget="percentpie" nolabel="1"/>
+                    <field name="percent_complete" widget="percentpie" nolabel="1"/>
+                </group>
+
+                <group>
+                    <separator string="Planned"/><br></br>
+                    <field name="tworkorder_ids" nolabel="1" options="{'reload_on_button': true}">
+                        <tree>
+                            <field name="period_id"/>
+                            <field name="ite_period_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="planned_progress"/>
+                            <field name="ite_progress"/>
+                            <field name="executed_progress"/>
+                            <field name="duration"/>
+                            <field name="timetracking_type"/>
+                            <field name="has_timetracking" invisible="1"/>
+                            <button name="show_tracking_btn"
+                                    help="Show Tracking"
+                                    icon="fa-activity-sm"
+                                    type="object"
+                                    attrs="{'invisible': [
+                                                ('has_timetracking', '=', False)
+                                            ]}"/>
+                            <field name="is_closed" invisible="1"/>
+                            <button name="is_closed_btn" type="object" icon="fa-unlock" help="Close Workorder on this period"
+                                    attrs="{'invisible': [('is_closed','=', True)]}"/>
+                            <button name="is_open_btn"  type="object" icon="fa-lock" help="Open Workorder on this period"
+                                    attrs="{'invisible': [('is_closed','=', False)]}"
+                                    groups="aci_estimation.group_estimation_chief"/>
+                        </tree>
+                    </field>
+                </group>
+                <separator string="Steps"/>
+                <group>
+                    <field name="step_ids" nolabel="1" options="{'reload_on_button': true}">
+                        <tree decoration-muted="timetracking_active == False" editable="top">
+                            <field name="timetracking_active" invisible="1"/>
+                            <field name="wkcenter_template" invisible="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <button name="button_detailed_form" icon="fa-external-link" type="object"
+                                    help="Open step"/>
+                            <field name="rate" string="Rate" attrs="{'readonly': [('parent.manual_update', '=', False)]}"/>
+                            <field name="product_qty" attrs="{'readonly': [('parent.manual_update', '=', False)]}"/>
+                            <field name="rate_uom" readonly="1"/>
+                            <field name="tracking_ratio" readonly="1" widget="percentage" string="WO %"/>
+                            <field name="percent_wo_complete" string="Exec WO %"/>
+                            <field name="full_percent_wo_complete" string="F.Exec WO %"/>
+                            <field name="duration_expected" widget="float_time"/>
+                            <field name="unit_extra" invisible="1"/>
+                            <field name="unit_labor" invisible="1"/>
+                            <field name="pay_amount"/>
+                            <field name="extra_cost" invisible="1"/>
+                            <field name="labor_cost" invisible="1"/>
+                            <field name="time_uom" readonly="1"/>
+                            <field name="has_timetracking" invisible="1"/>
+                            <button name="show_tracking_btn"
+                                    help="Show Tracking"
+                                    icon="fa-activity-sm"
+                                    type="object"
+                                    attrs="{'invisible': [
+                                        ('has_timetracking', '=', False)
+                                    ]}"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="product_id" domain="[('bom_type', '=', 'basic')]"/>
+                                    <field name="wkcenter_template"/>
+                                </group>
+                                <group>
+                                    <field name="duration_expected" widget="float_time"/>
+                                    <field name="wkcenter" domain="[('template_id', '=', wkcenter_template)]"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </group>
+                    </group>
+                </page>
+                <page string="Miscellaneous" name="workorder_page_misc" groups="mrp.group_mrp_manager">
+                    <group>
+                        <group>
+                            <field name="workcenter_id"/>
+                            <field name="production_id" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                     <group string="Management Type">
+                        <field name="manage_type" nolabel="1" widget="radio"/>
+                    </group>
+                    <group string="Tracking Type">
+                        <field name="timetracking_type" nolabel="1" widget="radio"/>
+                    </group>
+                    <group string="Product Wo">
+                        <field name="product_wo" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Work Instruction" name="workorder_page_work_instruction" attrs="{'invisible': [('worksheet', '=', False), ('worksheet_google_slide', '=', False), ('operation_note', '=', False)]}">
+                    <field name="worksheet_type" invisible="1"/>
+                    <field name="worksheet" widget="pdf_viewer" attrs="{'invisible': [('worksheet_type', '!=', 'pdf')]}"/>
+                    <field name="worksheet_google_slide" widget="embed_viewer" attrs="{'invisible': [('worksheet_type', '!=', 'google_slide')]}"/>
+                    <field name="operation_note" attrs="{'invisible': [('worksheet_type', '!=', 'text')]}"/>
+                </page>
+                </notebook>
+            </sheet>
+            <div class="oe_chatter" groups="mrp.group_mrp_manager">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="activity_ids" widget="mail_activity"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+            </form>
+        </field>
+    </record>
+
+   <record id="mrp_workorder_tree_view_inherit_restriction" model="ir.ui.view">
+        <field name="name">mrp.workorder.tree.view.inherit.restriction</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="action">
+                        [{
+                            "name": "Update Production",
+                            "act": "update_production_btn",
+                            "action": "aci_lbm_flowline.update_production_wizard_action",
+                            "context": {"default_type": "workorder"}
+                        },{
+                            "name": "Update Oper. Data",
+                            "act": "update_operation_btn",
+                            "action": "aci_estimation.update_workorder_wizard_action"
+                        },{
+                            "name": "Compute Worksteps",
+                            "act": "compute_operation_data",
+                            "method": "compute_operation_data"
+                        },{
+                            "name": "Activity Configurator",
+                            "act": "activity_configurator_btn",
+                            "views": [{"module": "aci_estimation", "xml_id": "mail_activity_configurator_form_view",
+                                     "type": "form"}],
+                            "binding_model": "mrp.workorder",
+                            "res_model": "mail.activity.configurator",
+                            "mode": "model",
+                            "context": {"source_res_model": "mrp.workorder"}
+                        },{
+                            "name": "Quality Configurator",
+                            "act": "quality_configurator_btn",
+                            "views": [{"module": "aci_estimation", "xml_id": "product_template_actions_form_view",
+                                     "type": "form"}],
+                            "binding_model": "mrp.workorder",
+                            "res_model": "product.template.actions",
+                            "context": {"source_res_model": "mrp.workorder"},
+                            "mode": "model"
+                        },
+                        {
+                            "name": "Change Quality Res.",
+                            "act": "change_quality_restriction_btn",
+                            "method": "change_quality_restriction_btn"
+                        }
+                        ]
+                    </attribute>
+                </xpath>
+                <field name="date_planned_start" position="before">
+                    <field name="party_wo_id"/>
+                    <field name="version"/>
+                    <field name="analytic_name"/>
+                </field>
+                <field name="state" position="after">
+                    <field name="has_estimation" invisible="1"/>
+                    <button name="show_estimation_btn" type="object" help="Show Estimations"
+                             attrs="{'invisible': [('has_estimation', '=', False)]}"
+                        class="oe_stat_button" widget="statinfo" icon="fa-estimation-blue-sm"/>
+                </field>
+            </data>
+        </field>
+    </record>
+
+    <record id="mrp_bom_form_view_tracking_inherit" model="ir.ui.view">
+            <field name="name">mrp.bom.form.view.tracking.inherit</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="aci_mrp_plm.mrp_bom_form_view" />
+            <field name="arch" type="xml">
+                <data>
+                    <button name="compare_bom_btn" position="after">
+                        <button type="object" name="update_operation_btn" string="Copy amount/rate"
+                                class="btn-default" attrs="{'invisible': [('bom_type','not in', ('model', 'workorder'))]}"/>
+                    </button>
+                    <field name="gantt_start" position="after">
+                        <field name="type_qty"/>
+                        <field name="type"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    <!-- Workcenter action -->
+
+    <record id="workcenter_line_def_tree_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="mrp.mrp_production_workorder_tree_view"/>
+        <field name="act_window_id" ref="mrp.action_work_orders"/>
+    </record>
+
+    <record id="workcenter_line_def_form_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="act_window_id" ref="mrp.action_work_orders"/>
+    </record>
+
+    <record id="workcenter_line_def_gantt_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">gantt</field>
+        <!-- <field name="view_id" ref="mrp_operations.workcenter_line_gantt"/> -->
+        <field name="view_id" ref="mrp.workcenter_line_gantt_production"/>
+        <field name="act_window_id" ref="mrp.action_work_orders"/>
+    </record>
+
+    <record id="workcenter_line_def_pivot_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="mrp_workorder_pivot_view"/>
+        <field name="act_window_id" ref="mrp.action_work_orders"/>
+    </record>
+
+    <record id="workcenter_line_def_graph_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="5"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="mrp.workcenter_line_graph"/>
+        <field name="act_window_id" ref="mrp.action_work_orders"/>
+    </record>
+
+    <record id="workcenter_line_def_calendar_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="6"/>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="mrp.workcenter_line_calendar"/>
+        <field name="act_window_id" ref="mrp.action_work_orders"/>
+    </record>
+
+
+    <!-- Workorder action -->
+
+    <record id="work_order_def_kanban_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <!-- <field name="view_id" ref="mrp_operations.workcenter_line_gantt"/> -->
+        <field name="view_id" ref="mrp.workcenter_line_kanban"/>
+        <field name="act_window_id" ref="mrp.mrp_workorder_todo"/>
+    </record>
+
+    <record id="work_order_def_tree_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="mrp.mrp_production_workorder_tree_view"/>
+        <field name="act_window_id" ref="mrp.mrp_workorder_todo"/>
+    </record>
+
+    <record id="work_order_def_form_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="act_window_id" ref="mrp.mrp_workorder_todo"/>
+    </record>
+
+    <record id="work_order_def_calendar_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="mrp.workcenter_line_calendar"/>
+        <field name="act_window_id" ref="mrp.mrp_workorder_todo"/>
+    </record>
+
+    <record id="work_order_def_pivot_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="mrp.workcenter_line_pivot"/>
+        <field name="act_window_id" ref="mrp.mrp_workorder_todo"/>
+    </record>
+
+    <record id="work_order_def_graph_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="5"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="mrp.workcenter_line_graph"/>
+        <field name="act_window_id" ref="mrp.mrp_workorder_todo"/>
+    </record>
+
+
+    <!-- work order action from manufacturing -->
+
+    <record id="manuf_workcenter_def_tree_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="mrp.mrp_production_workorder_tree_view"/>
+        <field name="act_window_id" ref="mrp.action_mrp_workorder_production_specific"/>
+    </record>
+
+    <record id="manuf_workcenter_def_form_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="act_window_id" ref="mrp.action_mrp_workorder_production_specific"/>
+    </record>
+
+    <record id="manuf_workcenter_def_gantt_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">gantt</field>
+        <!-- <field name="view_id" ref="mrp_operations.workcenter_line_gantt"/> -->
+        <field name="view_id" ref="mrp.workcenter_line_gantt_production"/>
+        <field name="act_window_id" ref="mrp.action_mrp_workorder_production_specific"/>
+    </record>
+
+    <record id="manuf_workcenter_def_calendar_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="mrp.workcenter_line_calendar"/>
+        <field name="act_window_id" ref="mrp.action_mrp_workorder_production_specific"/>
+    </record>
+
+    <record id="manuf_workcenter_def_pivot_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="5"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="mrp.workcenter_line_pivot"/>
+        <field name="act_window_id" ref="mrp.action_mrp_workorder_production_specific"/>
+    </record>
+
+    <record id="manuf_workcenter_def_graph_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="6"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="mrp.workcenter_line_graph"/>
+        <field name="act_window_id" ref="mrp.action_mrp_workorder_production_specific"/>
+    </record>
+    <record model="ir.actions.act_window" id="mrp.mrp_workcenter_productivity_report_blocked">
+            <field name="name">Productivity Losses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.workcenter.productivity</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="context">{'search_default_availability': '1',
+                                   'search_default_performance': '1',
+                                   'search_default_quality': '1'}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_empty_folder">
+                No productivity loss for this equipment
+              </p>
+            </field>
+        </record>
+
+    <record id="mail_activity_view_search_inherit" model="ir.ui.view">
+        <field name="name">mail_activity_view_search_inherit</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <filter string="Location" name="project_id_group" context="{'group_by': 'analytic_id'}"/>
+                <filter string="WorkOrder" name="res_name_group" context="{'group_by': 'res_name'}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="mail_activity_pending_report_inherit">
+        <field name="name">Pending Activity</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mail.activity</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+        <field name="domain">[('activity_source', '=', 'pending')]</field>
+        <field name="context">{'search_default_project_id_group': 1, 'search_default_res_name_group': 1,
+            'create':False,'edit':False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Pending Activity
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="mail_activity_pending_report_menu"
+              name="Pending Activity"
+            parent="mrp.menu_mrp_reporting"
+            action="mail_activity_pending_report_inherit"
+            sequence="15"/>
+
+
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_zk_device_block_wizard_form_view" model="ir.ui.view">
+        <field name="name">hr.zk.device.block.wizard.form.view</field>
+        <field name="model">hr.zk.device.block.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group><field name="year"/></group>
+                    <div class="clearfix"></div>
+                    <group>
+                        <field name="payment_period_grp" required="1" options="{'no_create': True}"/>
+                        <field name="date_from"/>
+                        <field name="all_employees"/>
+                    </group>
+                    <group>
+                        <field name="period_id" required="1" domain="[('group_id', '=', payment_period_grp)]" options="{'no_create': True}"/>
+                        <field name="date_to"/>
+                        <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"
+                            attrs="{'invisible': [('all_employees', '=', True)]}"/>
+                        <field name="origin" invisible="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="generate_attendance_button" type="object" string="Generate Attendance"
+                    class="btn-primary" attrs="{'invisible':[('origin','!=','attendance')]}"/>
+
+                    <button name="generate_block_button" type="object" string="Generate Block"
+                    class="btn-primary"  attrs="{'invisible':[('origin','!=','block')]}"/>
+
+                    <button name="generate_missing_log_button" type="object" string="Generate Logs"
+                    class="btn-primary"  attrs="{'invisible':[('origin','!=','log')]}"/>
+
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

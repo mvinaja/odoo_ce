@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+    <record id="monday" model="mrp.periodicity">
+        <field name="name">Monday</field>
+        <field name="code">monday</field>
+        <field name="periodicity_type">week</field>
+    </record>
+    <record id="tuesday" model="mrp.periodicity">
+        <field name="name">Tuesday</field>
+        <field name="code">tuesday</field>
+        <field name="periodicity_type">week</field>
+    </record>
+    <record id="wednesday" model="mrp.periodicity">
+        <field name="name">Wednesday</field>
+        <field name="code">wednesday</field>
+        <field name="periodicity_type">week</field>
+    </record>
+    <record id="Thursday" model="mrp.periodicity">
+        <field name="name">Thursday</field>
+        <field name="code">thursday</field>
+        <field name="periodicity_type">week</field>
+    </record>
+    <record id="Friday" model="mrp.periodicity">
+        <field name="name">Friday</field>
+        <field name="code">friday</field>
+        <field name="periodicity_type">week</field>
+    </record>
+    <record id="Saturday" model="mrp.periodicity">
+        <field name="name">Saturday</field>
+        <field name="code">saturday</field>
+        <field name="periodicity_type">week</field>
+    </record>
+    <record id="Sunday" model="mrp.periodicity">
+        <field name="name">Sunday</field>
+        <field name="code">sunday</field>
+        <field name="periodicity_type">week</field>
+    </record>
+    <record id="Lastday" model="mrp.periodicity">
+        <field name="name">Last Day of Month</field>
+        <field name="code">ld</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_1" model="mrp.periodicity">
+        <field name="name">1</field>
+        <field name="code">1</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_2" model="mrp.periodicity">
+        <field name="name">2</field>
+        <field name="code">2</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_3" model="mrp.periodicity">
+        <field name="name">3</field>
+        <field name="code">3</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_4" model="mrp.periodicity">
+        <field name="name">4</field>
+        <field name="code">4</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_5" model="mrp.periodicity">
+        <field name="name">5</field>
+        <field name="code">5</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_6" model="mrp.periodicity">
+        <field name="name">6</field>
+        <field name="code">6</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_7" model="mrp.periodicity">
+        <field name="name">7</field>
+        <field name="code">7</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_8" model="mrp.periodicity">
+        <field name="name">8</field>
+        <field name="code">8</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_9" model="mrp.periodicity">
+        <field name="name">9</field>
+        <field name="code">9</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_10" model="mrp.periodicity">
+        <field name="name">10</field>
+        <field name="code">10</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_11" model="mrp.periodicity">
+        <field name="name">11</field>
+        <field name="code">11</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_12" model="mrp.periodicity">
+        <field name="name">12</field>
+        <field name="code">12</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_13" model="mrp.periodicity">
+        <field name="name">13</field>
+        <field name="code">13</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_14" model="mrp.periodicity">
+        <field name="name">14</field>
+        <field name="code">14</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_15" model="mrp.periodicity">
+        <field name="name">15</field>
+        <field name="code">15</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_16" model="mrp.periodicity">
+        <field name="name">16</field>
+        <field name="code">16</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_17" model="mrp.periodicity">
+        <field name="name">17</field>
+        <field name="code">17</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_18" model="mrp.periodicity">
+        <field name="name">18</field>
+        <field name="code">18</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_19" model="mrp.periodicity">
+        <field name="name">19</field>
+        <field name="code">19</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_20" model="mrp.periodicity">
+        <field name="name">20</field>
+        <field name="code">20</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_21" model="mrp.periodicity">
+        <field name="name">21</field>
+        <field name="code">21</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_22" model="mrp.periodicity">
+        <field name="name">22</field>
+        <field name="code">22</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_23" model="mrp.periodicity">
+        <field name="name">23</field>
+        <field name="code">23</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_24" model="mrp.periodicity">
+        <field name="name">24</field>
+        <field name="code">24</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_25" model="mrp.periodicity">
+        <field name="name">25</field>
+        <field name="code">25</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_26" model="mrp.periodicity">
+        <field name="name">26</field>
+        <field name="code">26</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_27" model="mrp.periodicity">
+        <field name="name">27</field>
+        <field name="code">27</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_28" model="mrp.periodicity">
+        <field name="name">28</field>
+        <field name="code">28</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_29" model="mrp.periodicity">
+        <field name="name">29</field>
+        <field name="code">29</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_30" model="mrp.periodicity">
+        <field name="name">30</field>
+        <field name="code">30</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="day_31" model="mrp.periodicity">
+        <field name="name">31</field>
+        <field name="code">31</field>
+        <field name="periodicity_type">month</field>
+    </record>
+    <record id="sequence_1" model="mrp.periodicity.sequence">
+        <field name="name">1</field>
+        <field name="code">1</field>
+        
+    </record>
+    <record id="sequence_2" model="mrp.periodicity.sequence">
+        <field name="name">2</field>
+        <field name="code">2</field>
+        
+    </record>
+    <record id="sequence_3" model="mrp.periodicity.sequence">
+        <field name="name">3</field>
+        <field name="code">3</field>
+        
+    </record>
+    <record id="sequence_4" model="mrp.periodicity.sequence">
+        <field name="name">4</field>
+        <field name="code">4</field>
+        
+    </record>
+    <record id="sequence_5" model="mrp.periodicity.sequence">
+        <field name="name">5</field>
+        <field name="code">5</field>
+        
+    </record>
+    <record id="sequence_6" model="mrp.periodicity.sequence">
+        <field name="name">6</field>
+        <field name="code">6</field>
+        
+    </record>
+    <record id="sequence_7" model="mrp.periodicity.sequence">
+        <field name="name">7</field>
+        <field name="code">7</field>
+        
+    </record>
+    <record id="sequence_8" model="mrp.periodicity.sequence">
+        <field name="name">8</field>
+        <field name="code">8</field>
+        
+    </record>
+    <record id="sequence_9" model="mrp.periodicity.sequence">
+        <field name="name">9</field>
+        <field name="code">9</field>
+        
+    </record>
+    <record id="sequence_10" model="mrp.periodicity.sequence">
+        <field name="name">10</field>
+        <field name="code">10</field>
+        
+    </record>
+    <record id="sequence_11" model="mrp.periodicity.sequence">
+        <field name="name">11</field>
+        <field name="code">11</field>
+        
+    </record>
+    <record id="sequence_12" model="mrp.periodicity.sequence">
+        <field name="name">12</field>
+        <field name="code">12</field>
+        
+    </record>
+    <record id="sequence_13" model="mrp.periodicity.sequence">
+        <field name="name">13</field>
+        <field name="code">13</field>
+        
+    </record>
+    <record id="sequence_14" model="mrp.periodicity.sequence">
+        <field name="name">14</field>
+        <field name="code">14</field>
+        
+    </record>
+    <record id="sequence_15" model="mrp.periodicity.sequence">
+        <field name="name">15</field>
+        <field name="code">15</field>
+        
+    </record>
+    <record id="sequence_16" model="mrp.periodicity.sequence">
+        <field name="name">16</field>
+        <field name="code">16</field>
+        
+    </record>
+    <record id="sequence_17" model="mrp.periodicity.sequence">
+        <field name="name">17</field>
+        <field name="code">17</field>
+        
+    </record>
+    <record id="sequence_18" model="mrp.periodicity.sequence">
+        <field name="name">18</field>
+        <field name="code">18</field>
+        
+    </record>
+    <record id="sequence_19" model="mrp.periodicity.sequence">
+        <field name="name">19</field>
+        <field name="code">19</field>
+        
+    </record>
+    <record id="sequence_20" model="mrp.periodicity.sequence">
+        <field name="name">20</field>
+        <field name="code">20</field>
+        
+    </record>
+    <record id="sequence_21" model="mrp.periodicity.sequence">
+        <field name="name">21</field>
+        <field name="code">21</field>
+        
+    </record>
+    <record id="sequence_22" model="mrp.periodicity.sequence">
+        <field name="name">22</field>
+        <field name="code">22</field>
+        
+    </record>
+    <record id="sequence_23" model="mrp.periodicity.sequence">
+        <field name="name">23</field>
+        <field name="code">23</field>
+        
+    </record>
+    <record id="sequence_24" model="mrp.periodicity.sequence">
+        <field name="name">24</field>
+        <field name="code">24</field>
+        
+    </record>
+    <record id="sequence_25" model="mrp.periodicity.sequence">
+        <field name="name">25</field>
+        <field name="code">25</field>
+        
+    </record>
+    <record id="sequence_26" model="mrp.periodicity.sequence">
+        <field name="name">26</field>
+        <field name="code">26</field>
+        
+    </record>
+    <record id="sequence_27" model="mrp.periodicity.sequence">
+        <field name="name">27</field>
+        <field name="code">27</field>
+        
+    </record>
+    <record id="sequence_28" model="mrp.periodicity.sequence">
+        <field name="name">28</field>
+        <field name="code">28</field>
+        
+    </record>
+    <record id="sequence_29" model="mrp.periodicity.sequence">
+        <field name="name">29</field>
+        <field name="code">29</field>
+        
+    </record>
+    <record id="sequence_30" model="mrp.periodicity.sequence">
+        <field name="name">30</field>
+        <field name="code">30</field>
+        
+    </record>
+    <record id="sequence_31" model="mrp.periodicity.sequence">
+        <field name="name">31</field>
+        <field name="code">31</field>
+        
+    </record>
+    <record id="sequence_32" model="mrp.periodicity.sequence">
+        <field name="name">32</field>
+        <field name="code">32</field>
+        
+    </record>
+    <record id="sequence_33" model="mrp.periodicity.sequence">
+        <field name="name">33</field>
+        <field name="code">33</field>
+        
+    </record>
+    <record id="sequence_34" model="mrp.periodicity.sequence">
+        <field name="name">34</field>
+        <field name="code">34</field>
+        
+    </record>
+    <record id="sequence_35" model="mrp.periodicity.sequence">
+        <field name="name">35</field>
+        <field name="code">35</field>
+        
+    </record>
+    <record id="sequence_36" model="mrp.periodicity.sequence">
+        <field name="name">36</field>
+        <field name="code">36</field>
+        
+    </record>
+    <record id="sequence_37" model="mrp.periodicity.sequence">
+        <field name="name">37</field>
+        <field name="code">37</field>
+        
+    </record>
+    <record id="sequence_38" model="mrp.periodicity.sequence">
+        <field name="name">38</field>
+        <field name="code">38</field>
+        
+    </record>
+    <record id="sequence_39" model="mrp.periodicity.sequence">
+        <field name="name">39</field>
+        <field name="code">39</field>
+        
+    </record>
+    <record id="sequence_40" model="mrp.periodicity.sequence">
+        <field name="name">40</field>
+        <field name="code">40</field>
+        
+    </record>
+    <record id="sequence_41" model="mrp.periodicity.sequence">
+        <field name="name">41</field>
+        <field name="code">41</field>
+        
+    </record>
+    <record id="sequence_42" model="mrp.periodicity.sequence">
+        <field name="name">42</field>
+        <field name="code">42</field>
+        
+    </record>
+    <record id="sequence_43" model="mrp.periodicity.sequence">
+        <field name="name">43</field>
+        <field name="code">43</field>
+        
+    </record>
+    <record id="sequence_44" model="mrp.periodicity.sequence">
+        <field name="name">44</field>
+        <field name="code">44</field>
+        
+    </record>
+    <record id="sequence_45" model="mrp.periodicity.sequence">
+        <field name="name">45</field>
+        <field name="code">45</field>
+        
+    </record>
+    <record id="sequence_46" model="mrp.periodicity.sequence">
+        <field name="name">46</field>
+        <field name="code">46</field>
+        
+    </record>
+    <record id="sequence_47" model="mrp.periodicity.sequence">
+        <field name="name">47</field>
+        <field name="code">47</field>
+        
+    </record>
+    <record id="sequence_48" model="mrp.periodicity.sequence">
+        <field name="name">48</field>
+        <field name="code">48</field>
+        
+    </record>
+    <record id="sequence_49" model="mrp.periodicity.sequence">
+        <field name="name">49</field>
+        <field name="code">49</field>
+        
+    </record>
+    <record id="sequence_50" model="mrp.periodicity.sequence">
+        <field name="name">50</field>
+        <field name="code">50</field>
+        
+    </record>
+    <record id="sequence_51" model="mrp.periodicity.sequence">
+        <field name="name">51</field>
+        <field name="code">51</field>
+        
+    </record>
+    <record id="sequence_52" model="mrp.periodicity.sequence">
+        <field name="name">52</field>
+        <field name="code">52</field>
+        
+    </record>
+</data>
+</odoo>

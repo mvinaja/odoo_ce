@@ -1,0 +1,45 @@
+/* If the screen size is 601px wide or more*/
+@media screen and (min-width: 601px) {
+.calculator_result {
+    font-size:3vw;
+    text-align:right;
+}
+.calculator_text {
+    font-size:1vw;
+    text-align:center;
+}
+}
+
+/* If the screen size is 600px wide or less*/
+@media screen and (max-width: 600px) {
+.calculator_result {
+    font-size:5vw;
+    text-align:right;
+}
+.calculator_text {
+    font-size:3 vw;
+    text-align:center;
+}
+}
+
+.calculator_button {
+    width:100%;
+    color:gray;
+    background-color:aliceblue;
+    border-radius: 30%;
+}
+
+.calculator_open {
+    color:gainsboro;
+}
+.calculator_main{
+    clear:both;
+    margin-top:5%;
+}
+.calculator_div{
+	display: block;
+	float:left;
+	margin: 1% 0 1% 1.6%;
+    padding:2%;
+    width: 28.26%;
+}

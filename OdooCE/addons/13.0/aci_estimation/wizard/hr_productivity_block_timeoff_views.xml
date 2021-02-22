@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_productivity_block_timeoff_form_view" model="ir.ui.view">
+        <field name="name">hr.productivity.block.timeoff.form.view</field>
+        <field name="model">hr.productivity.block.timeoff</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <div colspan="2">
+                        <span>
+                            Select the time you want to take the selected time off block
+                        </span>
+                    </div>
+                    <group colspan="2" col="1">
+                        <field name="employee_id" readonly="1"/>
+                        <field name="date" widget="date" readonly="1"/>
+                        <field name="block_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        <field name="start"/>
+                        <field name="end"/>
+                        <field name="time" widget='float_time'/>
+                    </group>
+                </group>
+                <footer>
+                    <button type="object" name="button_timeoff" string="Take TimeOff" class="btn btn-primary"/>
+                    <button special="cancel" string="Cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

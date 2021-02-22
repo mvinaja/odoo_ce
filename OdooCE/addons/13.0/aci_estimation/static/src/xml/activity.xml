@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+    <t t-extend="mail.ChatterTopbar">
+        <t t-jquery="button.o_ChatterTopbar_button" t-operation="after">
+            <button class="btn btn-link o_chatter_button_all_activity"
+                    title="Show Activity" disabled="disabled"
+                    t-on-click="_onClickAllActivity">
+                <i class="fa fa-list-alt" role="img" aria-label="All Activities" title="All Activities"/>
+            </button>
+            <button class="btn btn-link o_chatter_button_rest_activity"
+                    title="Show Restrictions" disabled="disabled"
+                    t-on-click="_onClickRestrictionActivity">
+                <i class="fa fa-lock" role="img" aria-label="Restrictions" title="Restrictions"/>
+            </button>
+            <button class="btn btn-link o_chatter_button_nonc_activity"
+                    title="Show noncompliance" disabled="disabled"
+                    t-on-click="_onClickNoncomplianceActivity">
+                <i class="fa fa-warning" role="img" aria-label="Noncompliance" title="Noncompliance"/>
+            </button>
+            <button class="btn btn-link o_chatter_button_noncon_activity"
+                    title="Show nonconformity" disabled="disabled"
+                    t-on-click="_onClickNonconformityActivity">
+                <i class="fa fa-exclamation-circle" role="img" aria-label="Nonconformity" title="Nonconformity"/>
+            </button>
+            <button class="btn btn-link o_chatter_button_conf_activity"
+                    title="Restrictions" disabled="disabled"
+                    t-on-click="_onClickConfiguratorActivity">
+                <i class="fa fa-cogs" role="img" aria-label="Configurator" title="Configurator"/>
+            </button>
+        </t>
+    </t>
+<!--    <t t-extend="mail.activity_items">-->
+<!--        <t t-jquery="div#o_chatter_planned_activities" t-operation="replace">-->
+<!--            <div id="o_chatter_planned_activities" class="collapse show">-->
+<!--            <t t-foreach="activities" t-as="activity">-->
+<!--                <div class="o_thread_message" style="margin-bottom: 10px">-->
+<!--                    <div class="o_thread_message_sidebar">-->
+<!--                        <div class="o_avatar_stack">-->
+<!--                            <t t-if="activity.activity_icon">-->
+<!--                                <t t-set="icon" t-value="activity.activity_icon"/>-->
+<!--                            </t>-->
+<!--                            <t t-else="">-->
+<!--                                <t t-set="icon" t-value="activity.icon"/>-->
+<!--                            </t>-->
+<!--                            <img t-attf-src="/web/image#{activity.user_id[0] >= 0 ? ('/res.users/' + activity.user_id[0] + '/image_128') : ''}" class="o_thread_message_avatar rounded-circle mb8" t-att-title="activity.user_id[1]" t-att-alt="activity.user_id[1]"/>-->
+<!--                            <i t-att-class="'o_avatar_icon fa ' + icon + ' bg-' + (activity.state == 'planned'? 'success' : (activity.state == 'today'? 'warning' : 'danger')) + '-full'"-->
+<!--                               t-att-title="activity.activity_type_id[1]"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="o_thread_message_core">-->
+<!--                        <div class="o_mail_info text-muted">-->
+<!--                            <strong><span t-attf-class="o_activity_date o_activity_color_#{activity.state}"><t t-esc="activity.label_delay" /></span></strong>:-->
+<!--                            <strong t-if="activity.summary"> &#8220;<t t-esc="activity.summary"/>&#8221;</strong>-->
+<!--                            <strong t-if="!activity.summary"> <t t-esc="activity.activity_type_id[1]" /></strong>-->
+<!--                            <em> for </em>-->
+<!--                            <t t-esc="activity.assign_string" />-->
+<!--                            <a class="btn btn-link btn-info text-muted collapsed o_activity_info ml4" role="button" data-toggle="collapse" t-attf-data-target="#o_chatter_activity_info_#{activity.id}">-->
+<!--                                <i class="fa fa-info-circle" role="img" aria-label="Info" title="Info"></i>-->
+<!--                            </a>-->
+<!--                            <div class="o_thread_message_collapse collapse" t-attf-id="o_chatter_activity_info_#{activity.id}">-->
+<!--                                <dl class="dl-horizontal">-->
+<!--                                    <dt>Activity Source</dt>-->
+<!--                                    <dd class="mb8">-->
+<!--                                        <t t-esc="activity.activity_source"/>-->
+<!--                                    </dd>-->
+<!--                                    <dt>Activity type</dt>-->
+<!--                                    <dd class="mb8">-->
+<!--                                        <t t-esc="activity.activity_type_id[1]"/>-->
+<!--                                    </dd>-->
+<!--                                    <dt>Created on</dt>-->
+<!--                                    <dd class="mb8">-->
+<!--                                        <t t-esc="activity.create_date.format(datetimeFormat)"/>-->
+<!--                                        by-->
+<!--                                        <img t-attf-src="/web/image#{activity.create_uid[0] >= 0 ? ('/res.users/' + activity.create_uid[0] + '/image_128') : ''}"-->
+<!--                                            height="18" width="18"-->
+<!--                                            class="o_object_fit_cover rounded-circle mr4"-->
+<!--                                            t-att-title="activity.create_uid[1]"-->
+<!--                                            t-att-alt="activity.create_uid[1]"/>-->
+<!--                                        <b><t t-if="activity.workcenter_id">-->
+<!--                                                <t t-esc="activity.workcenter_id[1]"/></t>-->
+<!--                                            <t t-else="">-->
+<!--                                                <t t-esc="activity.create_uid[1]"/>-->
+<!--                                            </t>-->
+<!--                                        </b>-->
+<!--                                    </dd>-->
+<!--                                    <dt>Assigned to</dt>-->
+<!--                                    <dd class="mb8">-->
+<!--                                        <img t-attf-src="/web/image#{activity.user_id[0] >= 0 ? ('/res.users/' + activity.user_id[0] + '/image_128') : ''}" height="18" width="18" class="o_object_fit_cover rounded-circle mr4" t-att-title="activity.user_id[1]" t-att-alt="activity.user_id[1]"/>-->
+<!--                                        <b><t t-esc="activity.assign_string"/></b>-->
+<!--                                        <em>, due on </em><span t-attf-class="o_activity_color_#{activity.state}"><t t-esc="activity.date_deadline.format(dateFormat)"/></span>-->
+<!--                                    </dd>-->
+<!--                                </dl>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div t-if="activity.note" t-attf-class="o_thread_message_#{activity.activity_decoration ? activity.activity_decoration : 'note'} #{activity.activity_decoration ? 'alert alert-' + activity.activity_decoration : ''}">-->
+<!--                            <t t-raw="activity.note"/>-->
+<!--                        </div>-->
+<!--                        <t t-if="activity.mail_template_ids &amp;&amp; activity.mail_template_ids.length &gt; 0">-->
+<!--                            <div class="mt16" t-att-data-activity-id="activity.id" t-att-data-previous-activity-type-id="activity.activity_type_id[0]">-->
+<!--                                <t t-foreach="activity.mail_template_ids" t-as="mail_template">-->
+<!--                                    <div>-->
+<!--                                        <i class="fa fa-envelope-o" aria-label="Mail" title="Mail" role="img"></i>-->
+<!--                                        <span t-esc="mail_template.name"/>:-->
+<!--                                        <span class="o_activity_template_preview" t-att-data-template-id="mail_template.id">Preview</span>-->
+<!--                                        <span class="text-muted">or</span>-->
+<!--                                        <span class="o_activity_template_send" t-att-data-template-id="mail_template.id">Send Now</span>-->
+<!--                                    </div>-->
+<!--                                </t>-->
+<!--                            </div>-->
+<!--                        </t>-->
+<!--                        <div class="o_thread_message_tools btn-group">-->
+<!--                            <t t-call="mail.activity_thread_message_tools"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </t>-->
+<!--            </div>-->
+<!--        </t>-->
+<!--    </t>-->
+</templates>

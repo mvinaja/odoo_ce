@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_mrp_routing_time" model="ir.actions.act_window">
+            <field name="name">Work Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.workorder</field>
+            <field name="view_mode">graph,pivot,tree,form,gantt,calendar</field>
+            <field name="context">{'search_default_done': True}</field>
+            <field name="search_view_id" ref="mrp.view_mrp_production_work_order_search"/>
+            <field name="domain">[('production_id.routing_id', '=', active_id), ('state', '=', 'done')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                  No data to display
+                </p><p>
+                  You will get here statistics about the
+                  work orders duration related to this routing.
+                </p>
+            </field>
+        </record>
+
+        <record id="mrp_eco_action_routing" model="ir.actions.act_window">
+            <field name="name">Engineering Change Orders</field>
+            <field name="res_model">mrp.eco</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">['|', ('new_routing_id', '=', active_id),
+                                  ('routing_id', '=', active_id)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  Create a new engineering change order
+                </p>
+            </field>
+        </record>
+        <!-- Routings -->
+        <record id="mrp_routing_form_view" model="ir.ui.view">
+            <field name="name">mrp.routing.form</field>
+            <field name="model">mrp.routing</field>
+            <field name="arch" type="xml">
+                <form string="Routing">
+
+                     <header>
+                        <button type="object" name="create_operation_btn"
+                            string="Create Operations" class="oe_highlight"/>
+                        <button type="object" name="download_wbs_btn" string="Download WBS"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_mrp_workorder_show_steps" type="object" icon="fa-list-ul" context="{'search_default_routing_id': id}">
+                                Steps
+                            </button>
+                            <button name="%(action_mrp_routing_time)d" type="action" class="oe_stat_button" icon="fa-clock-o">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Time<br/> Analysis</span>
+                                </div>
+                            </button>
+                            <button class="oe_stat_button" name="%(mrp_eco_action_routing)d" type="action"
+                                    icon="fa-wrench" context="{'default_type': 'routing', 'default_routing_id': active_id}">
+                                <field string="ECOs" name="eco_count" widget="statinfo"/>
+                            </button>
+                            <button type="object" name="show_bom_btn"
+                                class="oe_stat_button" icon="fa-flask">
+                                <field name="bom_count" string="Models" widget="statinfo"/>
+                            </button>
+                            <button type="object" name="show_operation_btn"
+                                class="oe_stat_button" icon="fa-play-circle-o">
+                                <field name="operation_count" string="Operations" widget="statinfo"/>
+                            </button>
+                            <button type="object" name="show_workstep_btn"
+                                class="oe_stat_button" icon="fa-list-ul">
+                                <field name="workstep_count" string="Work Steps" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="code"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                 <field name="categ_id" options="{'no_create': True}"/>
+                                <field name="product_id" options="{'no_create': True}"
+                                    domain="[('categ_id', '=', categ_id), ('is_bom', '=', True)]"/>
+                                <field name="name"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                                <field name="version" readonly="1"/>
+                                <field name="gantt_start" required="1"/>
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Work Center Operations">
+                                <field name="operation_ids">
+                                    <tree editable="top" create="false"
+                                        decoration-success="state=='success'" decoration-warning="state=='warning'"
+                                        decoration-danger="state=='error'" decoration-muted="state=='draft'">
+                                        <field name="wbs_key"/>
+                                        <field name="name"/>
+                                        <button type="object" name="show_operation_btn" icon="fa-external-link"/>
+                                        <field name="party_id" string="Party"/>
+                                        <field name="operation_labor"/>
+                                        <field name="operation_fasar"/>
+                                        <field name="operation_amount"/>
+                                        <field name="operation_extra"/>
+                                        <field name="workcenter_id"/>
+                                        <field name="duration"/>
+                                        <field name="state" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="note"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mrp_routing_tree_view" model="ir.ui.view">
+            <field name="name">mrp.routing.tree</field>
+            <field name="model">mrp.routing</field>
+            <field name="arch" type="xml">
+                <tree string="Routing">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="product_tmpl_id"/>
+                    <field name="product_id"/>
+                    <field name="version"/>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="mrp_routing_kanban_view" model="ir.ui.view">
+            <field name="name">mrp.routing.kanban</field>
+            <field name="model">mrp.routing</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <strong class="o_kanban_record_title"><span><t t-esc="record.name.value"/></span></strong>
+                                    </div>
+                                    <span class="badge badge-pill"><field name="code"/></span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="mrp_routing_search_view" model="ir.ui.view">
+            <field name="name">mrp.routing.search</field>
+            <field name="model">mrp.routing</field>
+            <field name="arch" type="xml">
+                <search string="Routing">
+                    <field name="product_id"/>
+                    <field name="categ_id"/>
+                    <field name="attribute_value_ids"/>
+                    <field name="party_id"/>
+                    <field name="name" string="Routing" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]"/>
+                    <filter name="inactive" string="Archived" domain="[('active', '=', False)]"/>
+
+                    <separator string="Master Positions"/>
+                    <filter name="material" string="Material"
+                        domain="[('position_key','=',%(aci_product.material_position)d)]"/>
+                    <filter name="equipment" string="Equipment"
+                        domain="[('position_key','=',%(aci_product.equipment_position)d)]"/>
+                    <filter name="tool" string="Tool"
+                        domain="[('position_key','=',%(aci_product.tool_position)d)]"/>
+                    <filter name="semifinished" string="Semifinished"
+                        domain="[('position_key','=',%(aci_product.semifinished_position)d)]"/>
+                    <filter name="subcontract" string="Subcontract"
+                        domain="[('position_key','=',%(aci_product.subcontract_position)d)]"/>
+                    <filter name="land" string="Land"
+                        domain="[('position_key','=',%(aci_product.land_position)d)]"/>
+                    <filter name="freight" string="Freight"
+                        domain="[('position_key','=',%(aci_product.freight_position)d)]"/>
+                    <filter name="procedure" string="Procedure"
+                        domain="[('position_key','=',%(aci_product.procedure_position)d)]"/>
+                    <filter name="management" string="Management"
+                        domain="[('position_key','=',%(aci_product.management_position)d)]"/>
+
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="mrp_routing_action" model="ir.actions.act_window">
+            <field name="name">Routings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.routing</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="mrp_routing_tree_view"/>
+            <field name="domain">[('context_warehouse','=',context.get('context_warehouse'))]</field>
+            <field name="search_view_id" ref="mrp_routing_search_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new routing
+              </p><p>
+                Routings define the successive operations that need to be
+                done to realize a Manufacturing Order. Each operation from
+                a Routing is done at a specific Work Center and has a specific duration.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="aci_mrp_plm.mrp_routing_menu"
+          action="mrp_routing_action"
+          parent="aci_mrp_plm.mrp_product_menu"
+          groups="mrp.group_mrp_routings"
+          sequence="20"/>
+
+    </data>
+</odoo>

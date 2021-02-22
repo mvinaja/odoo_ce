@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+mrp_workorder_link,mrp_workorder_link,model_mrp_workorder_link,mrp.group_mrp_manager,1,1,1,1
+mrp_workcenter_member,mrp_workcenter_member,model_mrp_workcenter_member,mrp.group_mrp_manager,1,1,1,1
+account_budget_post_group,account_budget_post_group,model_account_budget_post_group,account.group_account_user,1,1,1,1

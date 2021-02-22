@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="timetracking_settings" model="ir.ui.view">
+        <field name="name">Estimation Configuration</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Time Tracking Data-String" string="Estimation"
+                     data-key="aci_estimation">
+                    <h2>Tracking</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="over_tracking"/>
+                                    <div class="text-muted">
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="over_tracking" class="o_light_label"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="under_tracking"/>
+                                    <div class="text-muted">
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="under_tracking" class="o_light_label"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <h2>Check In/Out</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="allow_delayed_check_in"/>
+                                <div class="text-muted">
+                                    The employee could do a delayed Check In even if the contract is restricted.
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="allow_delayed_check_in" class="o_light_label"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="tz"/>
+                                <div class="text-muted">
+                                    TimeZone used in the automatics checkouts.
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="tz" class="o_light_label"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+        <menuitem name="Estimation"
+        id="menu_estimation_configuration"
+        sequence="54"
+        groups="base.group_user"
+        web_icon="aci_estimation,static/description/icon.png"/>
+
+        <menuitem name="Estimation"
+            id="menu_estimation_app"
+            sequence="54"
+            groups="base.group_user"
+            web_icon="aci_estimation,static/description/icon.png"/>
+
+        <menuitem
+        id="estimation_menu_config"
+        name="Configuration"
+        parent="aci_estimation.menu_estimation_app"
+        sequence="25" groups="aci_estimation.group_estimation_chief"/>
+
+        <record id="estimation_settings_action" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_id" ref="timetracking_settings"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'aci_estimation'}</field>
+        </record>
+
+        <menuitem id="estimation_settings_menu"
+        name="Settings"
+        parent="estimation_menu_config"
+        action="estimation_settings_action"
+        groups="aci_estimation.group_estimation_chief"
+        sequence="0"/>
+</odoo>

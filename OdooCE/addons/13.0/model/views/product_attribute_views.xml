@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Product Attribute Category -->
+        <record id="product_attribute_category_list" model="ir.ui.view">
+            <field name="name">product.attribute.category.list</field>
+            <field name="model">product.attribute.category</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                    <field name="attribute_count"/>
+                    <button type="object" name="show_attribute_btn"
+                        icon="fa-th-list" class="btn btn-default"
+                        attrs="{'invisible': [('attribute_count','=',0)]}"/>
+                    <field name="attribute_ids" optional="show"
+                        widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="value_count"/>
+                    <button type="object" name="show_value_btn"
+                        icon="fa-tags" class="btn btn-default"
+                        attrs="{'invisible': [('value_count','=',0)]}"/>
+                    <field name="value_ids" optional="show" readonly="1"/>
+                    <field name="template_count"/>
+                    <button type="object" name="show_template_btn"
+                        icon="fa-file" class="btn btn-default"
+                        attrs="{'invisible': [('template_count','=',0)]}"/>
+                    <field name="product_count"/>
+                    <button type="object" name="show_product_btn"
+                        icon="fa-sticky-note" class="btn btn-default"
+                        attrs="{'invisible': [('product_count','=',0)]}"/>
+                    <field name="bom_count"/>
+                    <button type="object" name="show_bom_btn"
+                        icon="fa-flask" class="btn btn-default"
+                        attrs="{'invisible': [('bom_count','=',0)]}"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_attribute_category_form" model="ir.ui.view">
+            <field name="name">product.attribute.category.form</field>
+            <field name="model">product.attribute.category</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Product Attribute Category">
+                    <sheet>
+                        <group>
+                            <group>
+                                <div class="oe_title" colspan="2">
+                                    <label for="name"/>
+                                    <h2><field name="name"/></h2>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="sequence" class="oe_inline"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="website_sale_comparison.product_attribute_category_action" model="ir.actions.act_window">
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('product_attribute_category_list')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('product_attribute_category_form')})]"/>
+        </record>
+
+        <!-- Product Attribute -->
+        <record id="product_attribute_list" model="ir.ui.view" >
+            <field name="name">product.attribute.list</field>
+            <field name="model">product.attribute</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <tree action='[{
+                    "name": "Update Sequence",
+                    "act": "update_sequence_btn",
+                    "action": "aci_product.update_sequence_action",
+                    "context": {"active_model": "product.attribute"}
+                }, {
+                    "name": "Set State",
+                    "act": "update_state_btn",
+                    "action": "aci_product.update_attribute_state_wizard",
+                    "context": {"active_model": "product.attribute"}
+                }]' editable="top" decoration-info="state=='readonly'">
+                    <field name="sequence"/>
+                    <field name="category_id"/>
+                    <field name="name"/>
+                    <button type="object" name="show_form_btn"
+                        icon="fa-external-link" class="btn btn-default"/>
+                    <button type="object" name="product_configurator_btn"
+                        icon="fa-cogs" class="btn btn-default"/>
+                    <field name="create_variant"/>
+                    <field name="state"/>
+                    <field name="template_count"/>
+                    <button type="object" name="show_template_btn"
+                        icon="fa-file" class="btn btn-default"
+                        attrs="{'invisible': [('template_count','=',0)]}"/>
+                    <field name="product_count"/>
+                    <button type="object" name="create_product_btn"
+                        icon="fa-plus-circle" class="btn btn-default"
+                        attrs="{'invisible': [('template_count','=',0)]}"/>
+                    <button type="object" name="show_product_btn"
+                        icon="fa-sticky-note" class="btn btn-default"
+                        attrs="{'invisible': [('product_count','=',0)]}"/>
+                    <field name="value_count"/>
+                    <button type="object" name="create_value_btn"
+                        icon="fa-plus-circle" class="btn btn-default"/>
+                    <button type="object" name="show_value_btn"
+                        icon="fa-tags" class="btn btn-default"
+                        attrs="{'invisible': [('value_count','=',0)]}"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_attribute_form" model="ir.ui.view">
+            <field name="name">product.attribute.form</field>
+            <field name="model">product.attribute</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Product Attribute">
+                    <header>
+                        <button type="object" name="create_value_btn"
+                            string="Create Values" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="show_template_btn" string="Templates"
+                                icon="fa-file" class="oe_stat_button">
+                                <field name="template_count"/>
+                            </button>
+                            <button type="object" name="show_product_btn" string="Products"
+                                icon="fa-files-o" class="oe_stat_button">
+                                <field name="product_count"/>
+                            </button>
+                            <button type="object" name="show_value_btn" string="Values"
+                                icon="fa-tags" class="oe_stat_button">
+                                <field name="value_count"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <div class="oe_title" colspan="2">
+                                    <label for="name"/>
+                                    <h1><field name="name"/></h1>
+                                </div>
+                                <field name="create_variant" string="Prod. Conf. Mode"/>
+                            </group>
+                            <group name="properties">
+                                <field name="sequence" class="oe_inline"/>
+                                <field name="category_id" class="oe_inline"/>
+                                <field name="display_type" widget="radio"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Values">
+                                <field name="value_ids" context="{'default_attribute_id': active_id}">
+                                    <tree editable="top">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="manual_code"/>
+                                        <field name="code_length" required="1"/>
+                                        <field name="code"/>
+                                        <field name="template_count"/>
+                                        <button type="object" name="show_template_btn"
+                                            icon="fa-file" class="btn btn-default"
+                                            attrs="{'invisible': [('template_count','=',0)]}"/>
+                                        <button type="object" name="product_configurator_btn" icon="fa-cogs"
+                                            class="btn btn-default" context="{'target': 'template'}"/>
+                                        <field name="product_count"/>
+                                        <button type="object" name="show_product_btn"
+                                            icon="fa-sticky-note" class="btn btn-default"
+                                            attrs="{'invisible': [('product_count','=',0)]}"/>
+                                        <button type="object" name="product_configurator_btn" icon="fa-cogs"
+                                            class="btn btn-default" context="{'target': 'product'}"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_attribute_search" model="ir.ui.view">
+            <field name="name">product.attribute.search</field>
+            <field name="model">product.attribute</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="category_id" string="Category"/>
+                    <field name="name" string="Name"/>
+                    <filter name="unused" string="Without Products" domain="[('is_used_on_products','=',False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="product.attribute_action" model="ir.actions.act_window">
+            <field name="name">Product Attribute</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('product_attribute_list')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('product_attribute_form')})]"/>
+        </record>
+
+        <!-- Product Attribute Value -->
+        <record id="product_attribute_value_list" model="ir.ui.view">
+            <field name="name">product.attribute.value.list</field>
+            <field name="model">product.attribute.value</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="sequence" optional="show"/>
+                    <field name="category_id" optional="show"/>
+                    <field name="attribute_id"/>
+                    <field name="name"/>
+                    <field name="state" readonly="1" optional="show"/>
+                    <field name="manual_code" optional="show"/>
+                    <field name="code_length" required="1" optional="show"/>
+                    <field name="code"/>
+                    <field name="template_count"/>
+                    <button type="object" name="show_template_btn"
+                        icon="fa-file" class="btn btn-default"
+                        attrs="{'invisible': [('template_count','=',0)]}"/>
+                    <button type="object" name="attribute_configurator_btn" icon="fa-cogs"
+                        class="btn btn-default"/>
+                    <button type="object" name="add_missing_value_btn" icon="fa-search-plus"
+                        class="btn btn-default"/>
+                    <field name="product_count"/>
+                    <button type="object" name="show_product_btn"
+                        icon="fa-sticky-note" class="btn btn-default"
+                        attrs="{'invisible': [('product_count','=',0)]}"/>
+                    <button type="object" name="value_configurator_btn" icon="fa-cogs"
+                        class="btn btn-default"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_attribute_value_list_manager" model="ir.ui.view">
+            <field name="name">product.attribute.value.list.manager</field>
+            <field name="model">product.attribute.value</field>
+            <field name="inherit_id" ref="product_attribute_value_list"/>
+            <field name="groups_id" eval="[(6, 0, [ref('group_mrp_chief')])]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_attribute_value_search" model="ir.ui.view">
+            <field name="name">product.attribute.value.search</field>
+            <field name="model">product.attribute.value</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="attribute_id" string="Attribute"/>
+                    <field name="category_id" string="Category"/>
+                    <field name="name" string="Name"/>
+                    <filter name="unused" string="Unused"
+                        domain="[('template_count','=',0)]"/>
+                    <filter name="empty" string="Without Products"
+                        domain="[('template_count','>',0),('product_count','=',0)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="product_attribute_value_action" model="ir.actions.act_window">
+            <field name="name">Product Attribute Value</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.attribute.value</field>
+            <field name="target">current</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Compute attendance from attendance log dates -->
+    <record id="compute_attendance_form_view" model="ir.ui.view">
+        <field name="name">compute.attendance.form.view</field>
+        <field name="model">hr.attendance.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group col="4">
+                    <field name="year" required="1"/>
+                    <field name="period_grp_id" required="1" options="{'no_create': True}"/>
+                    <field name="period_id" required="1"
+                        domain="[('group_id', '=', period_grp_id)]"
+                        options="{'no_create': True}"/>
+                    <label for="date_from" string="From"/>
+                    <div>
+                        <field name="date_from" class="oe_inline"/>
+                        <span style="margin-left: 10px; margin-right: 10px;"><b>To</b></span>
+                        <field name="date_to" class="oe_inline"/>
+                    </div>
+                    <field name="all_employees"/>
+                    <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"
+                        attrs="{'invisible': [('all_employees', '=', True)]}"/>
+                    <field name="all_dates"/>
+                    <field name="search_date"
+                        attrs="{'invisible': [('all_dates', '=', True)], 'required': [('all_dates', '=', False)]}"/>
+                </group>
+                <footer>
+                    <button name="compute_attendance_button" type="object" string="Compute"
+                        class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="compute_individual_attendance_form_view" model="ir.ui.view">
+        <field name="name">compute.individual.attendance.form.view</field>
+        <field name="model">hr.attendance.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="period_grp_id" required="1" options="{'no_create': True}"/>
+                        <field name="date_from"/>
+                        <field name="employee_ids" widget="many2many_tags"
+                            options="{'no_create': True}" required="1"/>
+                    </group>
+                    <group>
+                        <field name="period_id" required="1" domain="[('group_id', '=', period_grp_id)]" options="{'no_create': True}"/>
+                        <field name="date_to"/>
+                        <field name="search_date"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="compute_individual_attendance_button" type="object" string="Compute"
+                        class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="import_checks_form_view" model="ir.ui.view">
+        <field name="name">import.checks.form.view</field>
+        <field name="model">hr.attendance.actions</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="period_grp_id" required="1" options="{'no_create': True}"/>
+                        <field name="date_from"/>
+                        <field name="all_employees"/>
+                    </group>
+                    <group>
+                        <field name="period_id" required="1" domain="[('group_id', '=', period_grp_id)]" options="{'no_create': True}"/>
+                        <field name="date_to"/>
+                        <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"
+                            attrs="{'invisible': [('all_employees', '=', True)]}"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="dat_name" invisible="1"/>
+                    <group>
+                        <field name="dat_file" filename="dat_name" required="1"/>
+                    </group>
+                    <group></group>
+                </group>
+                <footer>
+                    <button name="import_internal_checks_button" type="object" string="Import"
+                        class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

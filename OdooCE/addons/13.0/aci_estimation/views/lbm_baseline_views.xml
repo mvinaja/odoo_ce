@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="lbm_baseline_kanban_view_inherit" model="ir.ui.view">
+        <field name="name">lbm.baseline.kanban.view.inherit</field>
+        <field name="model">lbm.baseline</field>
+        <field name="inherit_id" ref="aci_lbm_flowline.lbm_baseline_kanban_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//div[@id='row_buttons']" position="replace">
+                    <div class="row" id="row_buttons" style="margin-left:5%">
+                    <button name="set_period_btn" class="btn-secondary"
+                        type="object"
+                        title="Periods">
+                            <span class="fa fa-tasks"/>
+                     </button>
+                        <button name="action_supervisor"  class="btn-secondary"
+                        type="object"
+                        title="Supervisors">
+                            <span class="fa fa-users"/>
+                     </button>
+                        <button name="action_workcenter"  class="btn-secondary"
+                        type="object"
+                        title="Workcenters">
+                            <span class="fa fa-user"/>
+                     </button>
+                        <button name="action_tracking_approve"  class="btn-secondary"
+                        type="object"
+                        title="Restrictions">
+                            <span class="fa fa-lock"/>
+                     </button>
+                     <button name="action_tracking"  class="btn-secondary"
+                        type="object"
+                        title="Activity">
+                            <span class="fa fa-calendar-o"/>
+                     </button>
+                    </div>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="lbm_baseline_form_view_inherit" model="ir.ui.view">
+        <field name="name">lbm.baseline.form.view.inherit</field>
+        <field name="model">lbm.baseline</field>
+        <field name="inherit_id" ref="aci_lbm_flowline.lbm_baseline_form_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <header position="inside">
+                    <button type="object" name="delete_tracking_btn" string="Delete Tracking"
+                            groups="aci_estimation.group_estimation_chief"
+                            confirm="Are you sure you want to delete this baseline Tracking? It would delete
+                                     tracking log and estimation lines"/>
+                </header>
+                <field name="type" position="after">
+                    <field name="lookahead_window"/>
+                </field>
+                <div name="button_box" position="inside">
+                    <button class="oe_stat_button" name="action_supervisor" type="object"
+                            icon="fa-users" help="Supervisors list">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Supervisors</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_workcenter" type="object"
+                            icon="fa-user" help="Daily Workcenters">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Workcenters</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_tracking_approve" type="object"
+                            icon="fa-lock" attrs="{'invisible': [('type', '=', 'periodic')]}"
+                    help="Restrictions">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Restrictions</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_tracking" type="object"
+                            icon="fa-calendar-o" help="Timetracking activity">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Tracking</span>
+                        </div>
+                    </button>
+                </div>
+                <button name="show_budget_btn" position="replace">
+                    <button type="object" name="show_budget_btn" icon="fa-list" help="Show Budgets"/>
+                </button>
+                <button name="update_scenario_btn" position="replace">
+                    <button type="object" name="update_scenario_btn" icon="fa-refresh" help="Update Scenario Data"/>
+                </button>
+                <button name="clear_scenario_btn" position="replace">
+                    <button type="object" name="clear_scenario_btn" icon="fa-minus-circle"
+                            help="Clear Scenario Data" attrs="{'invisible': [('lbm_budget_ids', '=', [])]}"/>
+                </button>
+                <button name="compute_flowline_btn" position="replace">
+                    <button type="object" name="compute_flowline_btn" icon="fa-cogs" help="Compute Flowline"/>
+                </button>
+                <button name="set_period_btn" position="replace">
+                <button type="object" name="set_period_btn" icon="fa-tasks"
+                        help="Show Periods" attrs="{'invisible': [('planning_type', '!=', 'replanning')]}"/>
+                </button>
+                <button name="compute_period_btn" position="replace">
+                <button type="object" name="compute_period_btn" icon="fa-cog"
+                        help="Compute Period" attrs="{'invisible': [('planning_type', '!=', 'replanning')]}"/>
+                </button>
+                <button name="export_date_btn" position="replace">
+                <button type="object" name="export_date_btn" icon="fa-arrow-circle-down"
+                        help="Export Workorder Dates" attrs="{'invisible': [('planning_type', '!=', 'replanning')]}"/>
+                </button>
+                <button name="show_flowline_btn" position="replace">
+                    <button type="object" name="show_flowline_btn" icon="fa-line-chart" help="Show Flowline"/>
+                </button>
+                <button name="cancel_baseline_btn" position="after">
+                   <button type="object" name="show_flowline_btn" help="Compare Scenario"
+                        class="btn-secondary"/>
+                </button>
+                <button name="select_scenario_btn" position="replace">
+                    <button name="select_scenario_btn" type="object" help="Activate Scenario" icon="fa-check-square-o"
+                                           attrs="{'invisible': [('planning_type', '=', 'executed')]}"/>
+                    <button name="analyze_scenario" type="object" icon="fa-search" help="Analyze Scenario" style="color:gray;"
+                            attrs="{'invisible': [('planning_type', '!=', 'replanning')]}"/>
+                </button>
+            </data>
+        </field>
+    </record>
+
+    <record id="lbm_baseline_estimation_kanban_view" model="ir.ui.view">
+        <field name="name">lbm.baseline.estimation.kanban.view</field>
+        <field name="model">lbm.baseline</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban" editable="0">
+                <field name="name"/>
+                <field name="planned_scenario"/>
+                <field name="production_count"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                       <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                            <div class="o_project_kanban_main">
+                                <div class="o_kanban_card_content o_visible col-xs-12">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <span><t t-esc="record.name.value"/></span>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="row_buttons">
+
+                                        <button name="set_period_btn"  class="btn-secondary"
+                                            type="object"
+                                            title="Periods">
+                                                <span class="fa fa-tasks fa-2x"/>
+                                         </button>
+                                        <button name="show_workcenter_btn"  class="btn-secondary"
+                                            type="object"
+                                            title="Workcenter Alternative">
+                                                <span class="fa fa-users fa-2x"/>
+                                         </button>
+                                        <button name="show_period_estimation" class="btn-secondary"
+                                            type="object"
+                                            title="Show Period Estimation">
+                                                <span class="fa fa-estimation-sm" style="width:25px;heigh:25px"/>
+                                         </button>
+                                         <button name="show_workorder_btn" class="btn-secondary"
+                                            type="object"
+                                            title="Show WorkOrders">
+                                                <span class="fa fa-workorder-sm"/>
+                                         </button>
+                                         <button name="show_step_btn" class="btn-secondary"
+                                            type="object"
+                                            title="Show Steps">
+                                                <span class="fa fa-step-sm"/>
+                                         </button>
+                                         <button name="show_cost_btn" class="btn-secondary"
+                                            type="object"
+                                            title="Show Steps">
+                                                <span class="fa fa-money fa-2x"/>
+                                         </button>
+                                    </div>
+                                     <div class="row" id="row_buttons">
+                                         <button name="show_workcenter_estimation" class="btn-secondary"
+                                            type="object"
+                                            title="Show Estimation Workcenters">
+                                                <span class="fa fa-user-plus fa-2x"/>
+                                         </button>
+                                        <button name="show_restriction" class="btn-secondary"
+                                            type="object"
+                                            title="Show Restrictions">
+                                                <span class="fa fa-lock fa-2x"/>
+                                         </button>
+                                        <button name="show_nonconformity" class="btn-secondary"
+                                            type="object"
+                                            title="Show NonConformity">
+                                                <span class="fa fa-exclamation-circle fa-2x"/>
+                                         </button>
+                                        <button name="show_restriction" class="btn-secondary"
+                                            type="object"
+                                            title="Show NonCompliance">
+                                                <span class="fa fa-warning fa-2x"/>
+                                         </button>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_manage_pane o_invisible">
+                                    <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                        <div groups="mrp.group_mrp_manager" name="bl-settings">
+                                            <a type="edit">Settings</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_project_kanban_manage">
+                                    <a class="o_kanban_manage_toggle_button o_left" href="#">More <i class="fa fa-caret-down"/></a>
+                                </div>
+                            </div>
+                            <div class="o_project_kanban_boxes">
+                                <div class="o_project_kanban_box">
+                                    <a type="object" name="show_production_btn">
+                                        <span class="o_value">
+                                            <t t-esc="record.production_count.raw_value" />
+                                        </span>
+                                        <span class="o_label">Manuf. Orders</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo noupdate="1">
+    <record id="ir_cron_estimation" model="ir.cron">
+        <field name="name">Estimation : Update</field>
+        <field name="model_id" ref="model_mrp_estimation"/>
+        <field name="state">code</field>
+        <field name="code">model._create_estimation()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+        <field name="priority">50</field>
+    </record>
+</odoo>

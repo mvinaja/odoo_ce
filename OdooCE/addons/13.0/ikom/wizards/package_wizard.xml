@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="package_wizard_form_view" model="ir.ui.view">
+            <field name="name">package.wizard.form.view</field>
+            <field name="model">package.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="product_tmpl_id" domain="[('is_package', '=', True)]"
+                                options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                        <footer>
+                            <button type="object" name="create_lines"
+                                string="Add Package" class="btn-primary"/>
+                            <button special="cancel" string="Cancel" class="btn-default"/>
+                        </footer>
+                  </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="package_product_wizard_form_view" model="ir.ui.view">
+            <field name="name">package.product.wizard.form.view</field>
+            <field name="model">package.product.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="categ_id" invisible="1"/>
+                            <field name="product_id" domain="[('is_package', '!=', True),
+                                                              ('categ_id', '=', categ_id)]"
+                                options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                        <footer>
+                            <button type="object" name="change_product"
+                                string="Change Product" class="btn-primary"/>
+                            <button special="cancel" string="Cancel" class="btn-default"/>
+                        </footer>
+                  </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

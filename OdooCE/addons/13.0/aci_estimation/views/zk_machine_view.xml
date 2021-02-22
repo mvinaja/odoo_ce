@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_zk_device_tree_view" model="ir.ui.view">
+        <field name="name">hr.zk.device.tree.view</field>
+        <field name="model">hr.zk.device.log</field>
+        <field name="arch" type="xml">
+            <tree string="Biometric Device" create="0" decoration-danger="status!='exportable'"
+                action='[{
+                        "name": "Create",
+                        "act": "create_custom_log_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "hr_zk_device_log_wizard_form_view", "type": "form"}],
+                        "src_model": "hr.zk.device.log",
+                        "res_model": "hr.zk.device.log.wizard",
+                        "mode": "model"
+                    },{
+                        "name": "Create Missing Log",
+                        "act": "generate_missing_log_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "hr_zk_device_block_wizard_form_view", "type": "form"}],
+                        "src_model": "hr.zk.device.log",
+                        "res_model": "hr.zk.device.block.wizard",
+                        "mode": "model",
+                        "context": {"default_origin": "log"}
+                    },{
+                        "name": "Generate Attendance Blocks",
+                        "act": "generate_attendance_block_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "hr_zk_device_block_wizard_form_view", "type": "form"}],
+                        "src_model": "hr.zk.device.log",
+                        "res_model": "hr.zk.device.block.wizard",
+                        "mode": "model",
+                        "context": {"default_origin": "block"}
+                    },{
+                        "name": "Approve",
+                        "act": "approve_log_btn",
+                        "method": "approve_log_btn",
+                        "src_model": "hr.zk.device.log"}
+                    ]' editable="top">
+                <field name="host" readonly="1"/>
+                <field name="device_user_id" readonly="1"/>
+                <field name="employee_id" readonly="1"/>
+                <field name="check_day" readonly="1"/>
+                <field name="check_date" attrs="{'readonly': [('phase','=', 'approved')]}"/>
+                <field name="status" readonly="1"/>
+                <field name="state" readonly="1"/>
+                <field name="phase" readonly="1"/>
+                <field name="period_id" readonly="1"/>
+                <button name="action_open"
+                            string="Open checks" type="object" help="Open Log"
+                            icon="fa-external-link-square"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_search_view" model="ir.ui.view">
+            <field name="name">hr_zk_device_search_view</field>
+            <field name="model">hr.zk.device.log</field>
+            <field name="arch" type="xml">
+                <search string="Search ...">
+                    <field name="employee_id"/>
+                    <field name="period_id"/>
+                    <field name="device_user_id"/>
+                    <field name="host"/>
+                    <field name="check_day"/>
+                    <field name="status"/>
+                    <field name="state"/>
+
+                    <filter name="today" string="Today" domain="[('check_date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),
+                    ('check_date', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+
+                    <filter name="yesterday" string="Yesterday"
+                            domain="[('check_date','&gt;=', ((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00'))), ('check_date','&lt;=', ((context_today()+datetime.timedelta(days=0)).strftime('%Y-%m-%d 00:00:00')))]" />
+
+                    <filter name="month" string="This Month"
+                            domain="[
+                                '&amp;',
+                                ('check_date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                ('check_date', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
+                    ]"/>
+                     <separator/>
+                    <filter name="original_state" string="Original"
+                            domain="[('state', '=', 'original')]"/>
+                    <filter name="modified_state" string="Modified"
+                            domain="[('state', '=', 'modified')]"/>
+                    <filter name="manual_state" string="Manual"
+                            domain="[('state', '=', 'manual')]"/>
+
+                     <separator/>
+
+                    <filter name="exportable_status" string="Exportable"
+                            domain="[('status', '=', 'exportable')]"/>
+                    <filter name="duplicated_status" string="Duplicated"
+                            domain="[('status', '=', 'duplicated')]"/>
+                    <filter name="incidence_status" string="On Incidence"
+                            domain="[('status', '=', 'incidence')]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="check_date" domain="[]" context="{'group_by': 'check_date'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by': 'status'}"/>
+                        <filter string="State" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Host" domain="[]" context="{'group_by': 'host'}"/>
+                        <filter string="Period" domain="[]" context="{'group_by': 'period_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record id="hr_zk_device_block_tree_view" model="ir.ui.view">
+        <field name="name">hr.zk.device.block.tree.view</field>
+        <field name="model">hr.zk.device.block</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Blocks" create="0"
+            decoration-danger="duration&lt;0"
+            decoration-warning="duration==0"
+            action='[{
+                        "name": "Generate Attendance",
+                        "act": "generate_attendance_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "hr_zk_device_block_wizard_form_view", "type": "form"}],
+                        "src_model": "hr.zk.device.log",
+                        "res_model": "hr.zk.device.block.wizard",
+                        "mode": "model",
+                        "context": {"default_origin": "attendance"}
+                    }]'>
+                <field name="employee_id" readonly="1"/>
+                <field name="date_start"  readonly="1"/>
+                <field name="date_end"  readonly="1"/>
+                <field name="duration"  readonly="1"/>
+                <field name="period_id"  readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_block_timeline_view" model="ir.ui.view">
+        <field name="model">hr.zk.device.block</field>
+        <field name="type">timeline</field>
+         <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <timeline date_start="date_start"
+                      date_stop="date_end"
+                      string="Attendance Block"
+                      default_group_by="employee_id"
+                      event_open_popup="true"
+                      zoomKey="ctrlKey">
+
+                <field name="employee_id"/>
+                <templates>
+                    <div t-name="timeline-item"></div>
+                </templates>
+            </timeline>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_block_pivot_view" model="ir.ui.view">
+            <field name="name">hr_zk_device_block_pivot_view</field>
+            <field name="model">hr.zk.device.block</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="employee_id" type="row"/>
+                    <field name="period_id" type="col"/>
+                    <field name="date_start" interval="day"  type="col"/>
+                    <field name="duration" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+    <record id="hr_zk_device_block_search_view" model="ir.ui.view">
+            <field name="name">hr_zk_device_block_search_view</field>
+            <field name="model">hr.zk.device.block</field>
+            <field name="arch" type="xml">
+                <search string="Search ...">
+                    <field name="employee_id"/>
+                    <field name="period_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+
+                    <filter name="today" string="Today" domain="[('date_start', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),
+                    ('date_start', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+
+                    <filter name="yesterday" string="Yesterday"
+                            domain="[('date_start','&gt;=', ((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00'))), ('date_start','&lt;=', ((context_today()+datetime.timedelta(days=0)).strftime('%Y-%m-%d 00:00:00')))]" />
+
+                    <filter name="not_today" string="Not Today" domain="[('date_start', '&lt;', context_today().strftime('%Y-%m-%d'))]" />
+
+                    <filter name="month" string="This Month"
+                            domain="[
+                                '&amp;',
+                                ('date_start', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                ('date_start', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
+                    ]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="Date Start" domain="[]" context="{'group_by': 'date_start'}"/>
+                        <filter string="Date End" domain="[]" context="{'group_by': 'date_end'}"/>
+                        <filter string="Period" domain="[]" context="{'group_by': 'period_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record id="hr_zk_device_incidence_tree_view" model="ir.ui.view">
+        <field name="name">hr.zk.device.incidence.tree.view</field>
+        <field name="model">hr.zk.device.incidence</field>
+        <field name="arch" type="xml">
+            <tree string="Incidences" create="0"
+            action='[{
+                        "name": "Generate Attendance Blocks",
+                        "act": "generate_attendance_block_btn",
+                        "views": [{"module": "aci_estimation", "xml_id": "hr_zk_device_block_wizard_form_view", "type": "form"}],
+                        "src_model": "hr.zk.device.log",
+                        "res_model": "hr.zk.device.block.wizard",
+                        "mode": "model",
+                        "context": {"default_origin": "block"}
+                    }]'>
+                <field name="employee_id" readonly="1"/>
+                <field name="period_id"  readonly="1"/>
+                <field name="check_day"  readonly="1"/>
+                <field name="check_date" widget="date"  readonly="1"/>
+                <field name="scheduled_check"  readonly="1"/>
+                <field name="done_check"  readonly="1"/>
+                <field name="manual_check"  readonly="1"/>
+                <button name="action_open"
+                            string="Open checks" type="object" help="Open Log"
+                            icon="fa-external-link-square"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_incidence_search_view" model="ir.ui.view">
+            <field name="name">hr_zk_device_incidence_search_view</field>
+            <field name="model">hr.zk.device.incidence</field>
+            <field name="arch" type="xml">
+                <search string="Search ...">
+                    <field name="employee_id"/>
+                    <field name="check_day"/>
+                    <field name="check_date"/>
+                    <field name="period_id"/>
+
+                    <filter name="today" string="Today" domain="[('check_date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),
+                    ('check_date', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+
+                     <filter name="yesterday" string="Yesterday"
+                            domain="[('check_date','&gt;=', ((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00'))), ('check_date','&lt;=', ((context_today()+datetime.timedelta(days=0)).strftime('%Y-%m-%d 00:00:00')))]" />
+
+                    <filter name="not_today" string="Not Today" domain="[('check_date', '&lt;', context_today().strftime('%Y-%m-%d'))]" />
+
+                    <filter name="current_period" string="Current Period"
+                    domain="[
+                        ('period_from', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                        ('period_to', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                    ]"/>
+                    <filter name="current_period_not_today" string="Current Period (not Today)"
+                    domain="[
+                        ('period_from', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                        ('period_to', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                        ('check_date', '&lt;', context_today().strftime('%Y-%m-%d'))
+                    ]"/>
+
+                    <filter name="month" string="This Month"
+                            domain="[
+                                '&amp;',
+                                ('check_date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                ('check_date', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
+                    ]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="Day of Week" domain="[]" context="{'group_by': 'check_day'}"/>
+                        <filter string="Day" domain="[]" context="{'group_by': 'check_date'}"/>
+                        <filter string="Period" domain="[]" context="{'group_by': 'period_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record id="hr_zk_device_hours_tree_view" model="ir.ui.view">
+        <field name="name">hr.zk.device.hours.tree.view</field>
+        <field name="model">hr.zk.device.hours</field>
+        <field name="arch" type="xml">
+            <tree string="Worked Hours" create="0">
+                <field name="employee_id" readonly="1"/>
+                <field name="resource_calendar_id"  readonly="1"/>
+                <field name="period_id"  readonly="1"/>
+                <field name="scheduled_hours"  readonly="1"/>
+                <field name="worked_hours" readonly="1"/>
+                <field name="diff_hours"  readonly="1"/>
+                <button name="action_open"
+                            string="Open Blocks" type="object" help="Open Block"
+                            icon="fa-external-link-square"/>
+                <button name="action_open_log"
+                            string="Open Log" type="object" help="Open Log"
+                            icon="fa-external-link"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_hours_search_view" model="ir.ui.view">
+            <field name="name">hr_zk_device_hours_search_view</field>
+            <field name="model">hr.zk.device.hours</field>
+            <field name="arch" type="xml">
+                <search string="Search ...">
+                    <field name="employee_id"/>
+                    <field name="resource_calendar_id"/>
+                    <field name="period_id"/>
+                    <field name="scheduled_hours"/>
+                    <field name="worked_hours"/>
+                    <field name="diff_hours"/>
+
+                    <filter name="current_period" string="Current Period"
+                    domain="[
+                        ('from_date', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                        ('to_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                        ('to_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                    ]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="Calendar" domain="[]" context="{'group_by': 'resource_calendar_id'}"/>
+                        <filter string="Period" domain="[]" context="{'group_by': 'period_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record id="hr_zk_device_report_tree_view" model="ir.ui.view">
+        <field name="name">hr.zk.device.block.report.view</field>
+        <field name="model">hr.zk.device.report</field>
+        <field name="arch" type="xml">
+            <tree string="Comparative Report" create="0">
+                <field name="period_id"  readonly="1"/>
+                <field name="employee_id" readonly="1"/>
+                <field name="start_date"  readonly="1"/>
+                <field name="end_date"  readonly="1"/>
+                <field name="block_type"  readonly="1"/>
+                <field name="state"  readonly="1"/>
+                <field name="block_origin"  readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_report_timeline_view" model="ir.ui.view">
+        <field name="model">hr.zk.device.report</field>
+        <field name="type">timeline</field>
+         <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <timeline date_start="start_date"
+                      date_stop="end_date"
+                      order="block_type"
+                      string="Comparative Report"
+                      default_group_by="employee_id"
+                      event_open_popup="false"
+                      colors="#ec7063:state == 'inactive';#2ecb71:state=='active';
+                              #00aeff:block_type == 'attendance_block';
+                              #ff5000:block_type == 'incidence';
+                              #00ff90:block_type == 'tracking_step';
+                              #00ff90:block_type == 'tracking_wo';"
+                      zoomKey="ctrlKey">
+
+                <field name="employee_id"/>
+                <field name="block_type"/>
+                <field name="state"/>
+                <field name="block_origin"/>
+                <templates>
+                    <div t-name="timeline-item">
+                        <div t-esc="record.block_type"/>
+                    </div>
+                </templates>
+            </timeline>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_report_search_view" model="ir.ui.view">
+            <field name="name">hr_zk_device_report_search_view</field>
+            <field name="model">hr.zk.device.report</field>
+            <field name="arch" type="xml">
+                <search string="Search ...">
+                    <field name="employee_id"/>
+                    <field name="period_id"/>
+                    <field name="block_type"/>
+                    <field name="state"/>
+                    <field name="block_origin"/>
+
+                    <filter name="current_period" string="Current Period"
+                    domain="[
+                        ('period_from', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                        ('period_to', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                        ('period_to', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                    ]"/>
+                    <separator/>
+                    <filter name="today" string="Today" domain="[('start_date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),
+                    ('start_date', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+
+                    <filter name="yesterday" string="Yesterday"
+                            domain="[('start_date','&gt;=', ((context_today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00'))),
+                             ('start_date','&lt;=', ((context_today()+datetime.timedelta(days=0)).strftime('%Y-%m-%d 00:00:00')))]" />
+
+                    <filter name="month" string="This Month"
+                            domain="[
+                                '&amp;',
+                                ('start_date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                ('start_date', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
+                    ]"/>
+                    <separator/>
+                     <filter name="attendance_block" string="Attendance Block"
+                    domain="[('block_type', '=', 'attendance_block')]"/>
+                     <filter name="productivity_block" string="Productivity/Activity Block"
+                    domain="[('block_type', '=', 'productivity_block')]"/>
+                     <filter name="tracking_step" string="Tracking by Step"
+                    domain="[('block_type', '=', 'tracking_step')]"/>
+                     <filter name="tracking_wo" string="Tracking by WorkOrder"
+                    domain="[('block_type', '=', 'tracking_wo')]"/>
+                     <filter name="incidence" string="Incidence"
+                    domain="[('block_type', '=', 'incidence')]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="Period" domain="[]" context="{'group_by': 'period_id'}"/>
+                        <filter string="Type" domain="[]" context="{'group_by': 'block_type'}"/>
+                        <filter string="State" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Origin" domain="[]" context="{'group_by': 'block_origin'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+<!--    ACTIONS-->
+    <record id="hr_zk_device_log_action" model="ir.actions.act_window">
+        <field name="name">ZK Devices log</field>
+        <field name="res_model">hr.zk.device.log</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="hr_zk_device_search_view"/>
+        <field name="context">{'search_default_today': 1,
+                               'search_default_yesterday': 1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Log from ZK Devices
+            </p>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_block_action" model="ir.actions.act_window">
+        <field name="name">ZK Attendance Blocks</field>
+        <field name="res_model">hr.zk.device.block</field>
+        <field name="view_mode">tree,pivot,timeline</field>
+        <field name="search_view_id" ref="hr_zk_device_block_search_view"/>
+        <field name="context">{'search_default_today': 1,
+                               'search_default_yesterday': 1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Blocks based on Device Logs
+            </p>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_incidence_action" model="ir.actions.act_window">
+        <field name="name">ZK Attendance Incidences</field>
+        <field name="res_model">hr.zk.device.incidence</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="hr_zk_device_incidence_search_view"/>
+        <field name="context">{'search_default_current_period_not_today': 1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Incidences based on Attendance Log
+            </p>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_hours_action" model="ir.actions.act_window">
+        <field name="name">ZK Worked Hours</field>
+        <field name="res_model">hr.zk.device.hours</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="hr_zk_device_hours_search_view"/>
+        <field name="context">{'search_default_current_period': 1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Worked Hours calculated by ZK device Log
+            </p>
+        </field>
+    </record>
+
+    <record id="hr_zk_device_report_action" model="ir.actions.act_window">
+        <field name="name">ZK Comparative Report</field>
+        <field name="res_model">hr.zk.device.report</field>
+        <field name="view_mode">timeline,tree</field>
+        <field name="search_view_id" ref="hr_zk_device_report_search_view"/>
+        <field name="context">{'search_default_current_period': 1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Comparative Report
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="hr_zk_menu" parent="hr_attendance.menu_hr_attendance_root" sequence="50" name="Biometric Manager" />
+    <menuitem id="hr_zk_device_log_menu" parent="hr_zk_menu"  name="Device Log" action="aci_estimation.hr_zk_device_log_action"
+              sequence="1"/>
+    <menuitem id="hr_zk_device_incidence_menu" parent="hr_zk_menu"  name="Incidences"
+              action="aci_estimation.hr_zk_device_incidence_action"
+              sequence="5"/>
+    <menuitem id="hr_zk_device_block_menu" parent="hr_zk_menu"  name="Attendance Block"
+              action="aci_estimation.hr_zk_device_block_action"
+              sequence="10"/>
+    <menuitem id="hr_zk_device_hours_menu" parent="hr_zk_menu"  name="Worked Hours"
+              action="aci_estimation.hr_zk_device_hours_action"
+              sequence="15"/>
+    <menuitem id="hr_zk_device_report_menu" parent="hr_zk_menu"  name="Report"
+              action="aci_estimation.hr_zk_device_report_action"
+              sequence="20"/>
+</odoo>
+

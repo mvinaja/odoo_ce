@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+    <record id="aci_stop_stage" model="mrp.timetracking.stage">
+        <field name="name">ToDo</field>
+        <field name="fold" eval="False"/>
+        <field name="base_create" eval="True"/>
+    </record>
+
+    <record id="aci_working_stage" model="mrp.timetracking.stage">
+        <field name="name">Working</field>
+        <field name="fold" eval="False"/>
+        <field name="base_create" eval="True"/>
+    </record>
+
+    <record id="aci_blocked_stage" model="mrp.timetracking.stage">
+        <field name="name">Blocked</field>
+        <field name="fold" eval="False"/>
+        <field name="base_create" eval="True"/>
+    </record>
+
+    <record id="aci_finished_stage" model="mrp.timetracking.stage">
+        <field name="name">Finished</field>
+        <field name="fold" eval="False"/>
+        <field name="base_create" eval="True"/>
+    </record>
+
+     <record id="aci_cancel_stage" model="mrp.timetracking.stage">
+        <field name="name">Cancel</field>
+        <field name="fold" eval="False"/>
+        <field name="base_create" eval="True"/>
+    </record>
+</data>
+</odoo>
