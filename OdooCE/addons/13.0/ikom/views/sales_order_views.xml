@@ -3,6 +3,20 @@
     <data>
 
         <!-- Package Items -->
+        <record id="stock_picking_form_view_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form.view.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="move_line_ids_without_package" position="before">
+                    <group>
+                            <button type="object" name="update_lot" string="Update Lot"
+                                    class="oe_highlight" icon="fa-refresh"/>
+                        </group>
+                </field>
+            </field>
+        </record>
+
         <record id="sales_order_form_view_inherit" model="ir.ui.view">
             <field name="name">sale.order.form.view.inherit</field>
             <field name="model">sale.order</field>
@@ -10,8 +24,10 @@
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='order_lines']" position="before">
                     <page name="packages" string="IKOM Packages">
-                        <button type="object" name="add_package" string="Add Package"
-                        class="oe_highlight"/>
+                        <group>
+                            <button type="object" name="add_package" string="Add Package"
+                                    class="oe_highlight" icon="fa-plus"/>
+                        </group>
                         <field name="package_ids">
                             <tree editable="bottom" create="0" edit="0">
                                 <field name="name" readonly="1"/>
@@ -20,6 +36,7 @@
                     </page>
                 </xpath>
                 <xpath expr="//page[@name='order_lines']" position="replace">
+<!--                    Replace the whole page expecting more changing here-->
                     <page string="Order Lines" name="order_lines">
                             <field
                                 name="order_line"
@@ -156,8 +173,9 @@
                                     <button type="object" name="change_product_btn"
                                         icon="fa-pencil" class="btn btn-default"
                                         attrs="{'invisible': [('package_categ_id','=', False)]}"/>
-                                    <field name="lot_id" domain="[('product_id', '=', product_id)]"
-                                        attrs="{'readonly': [('package_id', '=', False)]}"
+                                    <field name="lot_id" domain="[('product_id', '=', product_id), ('lot_qty', '>', 0)]"
+                                        attrs="{'readonly': [('package_id', '=', False)],
+                                                'required': [('package_id', '!=', False)]}"
                                         options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
                                     <field name="product_template_id"
                                       string="Product"
@@ -196,6 +214,9 @@
                                             'uom': product_uom,
                                             'company_id': parent.company_id
                                         }"
+                                        attrs="{
+                                            'readonly': [('package_id', '!=', False)],
+                                        }"
                                     />
                                     <field
                                         name="qty_delivered"
@@ -220,7 +241,7 @@
                                         force_save="1"
                                         string="UoM"
                                         attrs="{
-                                            'readonly': [('state', 'in', ('sale','done', 'cancel'))],
+                                            'readonly': ['|', ('package_id', '!=', False), ('state', 'in', ('sale','done', 'cancel'))],
                                             'required': [('display_type', '=', False)],
                                         }"
                                         context="{'company_id': parent.company_id}"

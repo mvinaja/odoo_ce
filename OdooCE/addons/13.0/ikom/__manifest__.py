@@ -23,6 +23,7 @@
 
         'views/product_template_views.xml',
         'views/sales_order_views.xml',
+        'views/sale_order_line_views.xml',
 
         'wizards/package_wizard.xml',
     ],

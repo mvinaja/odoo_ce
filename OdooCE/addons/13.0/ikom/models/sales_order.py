@@ -19,9 +19,53 @@ class SalesOrderPackage(models.Model):
             r.name = "%s %s" % (r.product_tmpl_id.name, r.id)
 
 
+class StockProductionLot(models.Model):
+    _inherit = 'stock.production.lot'
+
+    lot_qty = fields.Float(compute='_compute_lot_qty', string='Qty', digits='Product Unit of Measure', store=True)
+
+    @api.depends('product_qty')
+    def _compute_lot_qty(self):
+        for lot in self:
+            lot.lot_qty = lot.product_qty
+
+
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    def update_lot(self):
+        taken_lot = []
+        for line in self.move_line_ids_without_package:
+            lot_ids = self.sale_id.mapped('order_line').filtered(lambda r: r.product_id.id == line.product_id.id).mapped('lot_id')
+            line_done = False
+            for lot_id in lot_ids:
+                if lot_id.id not in taken_lot and not line_done:
+                    line.lot_id = lot_id.id
+                    taken_lot.append(lot_id.id)
+                    line_done = True
+
+
+class StockMoveLine(models.Model):
+    _inherit = "stock.move.line"
+
+    @api.model
+    def default_get(self, fields):
+        result = super(StockMoveLine, self).default_get(fields)
+
+        if 'sale_id' in result and 'product_id' in result:
+            line_ids = self.env['sale.order'].browse(result['sale_id']).mapped('order_line').filtered(lambda r: r.package_id is not None)
+            if line_ids:
+                result['lot_id'] = line_ids[0].lot_id.id
+
+        return result
+
+
 class SalesOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    product_tmpl_id = fields.Many2one(related='product_id.product_tmpl_id', store=True)
+
+    # Using Odoo Stock methods to create domain
     @api.model
     def _is_inventory_mode(self):
         return self.env.context.get('inventory_mode') is True and self.user_has_groups('stock.group_stock_manager')
@@ -66,6 +110,12 @@ class SalesOrderLine(models.Model):
             'context': {'default_categ_id': self.package_categ_id.id}
         }
 
+    def _create_report(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/web/download/lot_report',
+            'target': 'self',
+        }
 
 class SalesOrder(models.Model):
     _inherit = 'sale.order'
